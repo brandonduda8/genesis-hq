@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# dragon — the Dragon OS CLI.
+# Usage: dragon {status|tools|workers|boot|laws}
+set -u
+DRAGON_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HQ_DIR="$(cd "$DRAGON_DIR/.." && pwd)"
+
+cmd_status() {
+  echo "🐉 Dragon OS — $(hostname)"
+  echo "  box:     $(nproc) cores / $(free -g | awk '/Mem:/{print $2}')G RAM / $(df -h "$HQ_DIR" | awk 'NR==2{print $4}') free"
+  echo "  tailnet: $(tailscale status --json 2>/dev/null | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("Self",{}).get("HostName","down"))' 2>/dev/null || echo down)"
+  echo "  docker:  $(docker info >/dev/null 2>&1 && echo up || echo down)"
+  echo "  inbox:   $(ls "$HQ_DIR/inbox" 2>/dev/null | wc -l) work orders waiting"
+  echo "  outbox:  $(ls "$HQ_DIR/outbox" 2>/dev/null | wc -l) results delivered"
+}
+
+cmd_tools() { sed -n '/^## /,$p' "$DRAGON_DIR/TOOLBELT.md" | grep '^## \|^- \*\*' | head -40; }
+
+cmd_workers() {
+  if command -v worker-bridge.sh >/dev/null 2>&1; then worker-bridge.sh probe;
+  else echo "worker-bridge.sh not installed"; fi
+}
+
+cmd_boot() { bash "$DRAGON_DIR/boot.sh"; }
+cmd_laws() { cat "$DRAGON_DIR/LAWS.md"; }
+
+case "${1:-status}" in
+  status)  cmd_status ;;
+  tools)   cmd_tools ;;
+  workers) cmd_workers ;;
+  boot)    cmd_boot ;;
+  laws)    cmd_laws ;;
+  *) echo "usage: dragon {status|tools|workers|boot|laws}" >&2; exit 2 ;;
+esac
