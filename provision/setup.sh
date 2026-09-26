@@ -17,6 +17,14 @@ if ! grep -q 'export PATH="$HOME/bin:$PATH"' "$HOME/.bashrc" 2>/dev/null; then
 fi
 echo "[hq] worker bridge installed -> $BIN_DIR"
 
+# 1b. Dragon OS layer
+mkdir -p "$HOME/dragon"
+cp -r "$REPO_DIR/dragon/"* "$HOME/dragon/"
+chmod +x "$HOME/dragon/boot.sh" "$HOME/dragon/dragon"
+ln -sf "$HOME/dragon/dragon" "$BIN_DIR/dragon"
+mkdir -p "$REPO_DIR/inbox" "$REPO_DIR/outbox"
+echo "[hq] dragon OS installed -> ~/dragon (cli: dragon {status|tools|workers|boot|laws})"
+
 # 2. Agent CLIs (user runs the one-tap logins below afterwards)
 if ! command -v npm >/dev/null 2>&1; then
   echo "[hq] npm missing, skipping CLI installs"
@@ -71,3 +79,7 @@ then rebuild the codespace. HQ will appear as 'genesis-hq' on the tailnet.
 Free-tier budget: this box is 4-core ~= 30 hrs/month, then it pauses.
 No GPU. It is a strong dev box, not a supercomputer - spend hours wisely.
 NEXT
+
+# 6. Boot Dragon OS
+export PATH="$BIN_DIR:$PATH"
+bash "$HOME/dragon/boot.sh" || true
