@@ -1,0 +1,1 @@
+{"customizations":{"vscode":{"extensions":["ms-vscode.vscode-json"]}},"hostRequirements":{"cpus":4,"memory":"16gb","storage":"32gb"},"image":"mcr.microsoft.com/devcontainers/universal:2","name":"Genesis HQ","postCreateCommand":"bash provision/setup.sh","shutdownAction":"stopContainer"}
