@@ -37,6 +37,11 @@ Or via CLI: `gh codespace create -r brandonduda8/genesis-hq -m standardLinux32gb
   source of truth.
 - No surprise billing: the account budget stays $0.
 
+## Dragon OS
+
+HQ boots **Dragon OS** — the operating system for all workers: one work-order
+protocol, one dispatcher, one set of laws, on every box. See [DRAGON_OS.md](DRAGON_OS.md).
+
 ## What's inside
 
 - `bin/worker-bridge.sh` — unified dispatcher: `probe` / `run <lane> <wo-file>`
