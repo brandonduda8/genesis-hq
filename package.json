@@ -1,0 +1,11 @@
+{
+  "name": "genesis-alliance-nexus",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Genesis Alliance HQ prototype: durable GitHub work orders and authenticated control surface",
+  "engines": {"node": ">=20"},
+  "scripts": {
+    "start": "node render-nexus/server.mjs",
+    "test:nexus": "node --test render-nexus/test.mjs"
+  }
+}
