@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10121b">
+  <meta name="description" content="Genesis Foundry — take a product idea to a working, inspectable first artifact.">
+  <title>Genesis Foundry — Product Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar" aria-label="Foundry navigation">
+    <div class="symbol" title="Genesis">G<span class="star">✦</span></div>
+    <div class="side-nav">
+      <button class="nav-btn active" data-panel="studio" title="Studio" aria-label="Studio">◈</button>
+      <button class="nav-btn" data-panel="missions" title="Missions" aria-label="Missions">☷</button>
+      <button class="nav-btn" data-panel="proof" title="Proof" aria-label="Proof">◇</button>
+    </div>
+    <div class="aside-end"><span class="online-dot"></span><span class="version">v0.1</span></div>
+  </aside>
+  <div class="workarea">
+    <header class="topbar">
+      <div class="brand"><b>GENESIS</b><span class="slash">/</span><span>FOUNDRY</span></div>
+      <div class="topright"><span class="status-pill"><i></i> BROWSER-LOCAL BUILD</span><span class="stage-label">PROTOTYPE</span></div>
+    </header>
+    <main>
+      <section id="panel-studio" class="panel active">
+        <div class="intro">
+          <div class="eyebrow"><span class="thin-line"></span> THE PRODUCT FACTORY</div>
+          <h1>Ideas deserve<br><em>to become real.</em></h1>
+          <p>Go from a product idea to a working first deliverable. Build a launch website, inspect the plan, and take the files with you.</p>
+        </div>
+        <div class="steps"><span class="steps-current">01 / DEFINE</span><span>02 / BUILD</span><span>03 / VERIFY</span><span>04 / EXPORT</span></div>
+        <div class="workspace-grid">
+          <section class="editor box">
+            <div class="box-head"><div><p class="kicker">WORKSPACE 001</p><h2>What are we making?</h2></div><div class="shape"><span></span><span></span><span></span></div></div>
+            <label for="productName">PRODUCT NAME</label><input id="productName" maxlength="65" placeholder="e.g. Aurum Audio" value="Aurum Audio">
+            <label for="tagline">THE PROMISE <small>(what makes it worth using?)</small></label><textarea id="tagline" maxlength="180" rows="2" placeholder="A sentence your future customer will remember.">Feel every detail. Rediscover your music with a listening experience designed around you.</textarea>
+            <label for="audience">WHO IS IT FOR?</label><input id="audience" maxlength="100" value="People who live for music" placeholder="Your ideal audience">
+            <label for="features">THREE REAL FEATURES <small>(one per line)</small></label><textarea id="features" maxlength="320" rows="3">Personal sound presets
+Focus mode listening
+Your library, beautifully organized</textarea>
+            <div class="two-cols"><div><label for="cta">BUTTON LABEL</label><input id="cta" maxlength="45" value="Explore Aurum"></div><div><label for="ctaUrl">BUTTON DESTINATION</label><input id="ctaUrl" maxlength="220" value="#discover" placeholder="https://… or #discover"></div></div>
+            <label>VISUAL IDENTITY</label><div class="theme-choices" role="group" aria-label="Visual identity">
+              <button type="button" class="theme-choice active" data-theme="ember" aria-pressed="true"><span class="swatch ember"></span> EMBER</button>
+              <button type="button" class="theme-choice" data-theme="nebula" aria-pressed="false"><span class="swatch nebula"></span> NEBULA</button>
+              <button type="button" class="theme-choice" data-theme="mint" aria-pressed="false"><span class="swatch mint"></span> CURRENT</button>
+            </div>
+            <button id="build" class="main-button" type="button"><span>✦</span> Build my product <span class="arrow">↗</span></button>
+            <div class="sample-row"><span>Need inspiration?</span><button type="button" id="sampleSaaS">Use SaaS example ↗</button><button type="button" id="sampleMusic">Aurum example ↗</button></div>
+          </section>
+          <section class="preview box">
+            <div class="box-head preview-heading"><div><p class="kicker">REAL ARTIFACT 001</p><h2>Live product preview</h2></div><span id="previewStatus" class="mini-status">READY</span></div>
+            <div class="browser"><div class="browser-toolbar"><div class="traffic"><span></span><span></span><span></span></div><span class="url-text" id="previewUrl">preview://genesis-foundry</span><span class="browser-action">↗</span></div><iframe title="Generated website preview" id="previewFrame" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe></div>
+            <div class="preview-foot"><div class="verified"><span>✓</span><div><strong id="buildBadge">Generated locally</strong><small id="buildDetail">No model calls. No fake worker claims.</small></div></div><button id="downloadHtml" type="button" class="secondary-button">↓ Export website</button></div>
+          </section>
+        </div>
+        <div class="after-grid"><div class="after-label">CREATED BY GENESIS <span> / </span> A FIRST DELIVERABLE, NOT JUST A PROMISE</div><button type="button" id="viewMission">Inspect the mission plan →</button></div>
+      </section>
+      <section id="panel-missions" class="panel">
+        <div class="intro compact"><div class="eyebrow"><span class="thin-line"></span> ENGINEERING COUNCIL</div><h1>One objective.<br><em>A coordinated plan.</em></h1><p>A traceable execution plan designed for real workers. Roles are proposed, not running; nothing is dispatched from this demo.</p></div>
+        <div class="info-strip"><span class="pilot">PLAN PREVIEW / NOT EXECUTED</span><span id="missionTarget">Aurum Audio</span><button id="downloadPlan" type="button" class="secondary-button">↓ Export work order</button></div>
+        <div id="missionCards" class="mission-grid"></div>
+        <div class="mission-note"><b>Execution boundary</b><p>This prototype generates a deterministic plan and a browser-made website. It does not invoke Claude, Ruflo, Antigravity, or OpenHands. Approved worker dispatch, independent verification, and receipts are future integrations.</p></div>
+      </section>
+      <section id="panel-proof" class="panel">
+        <div class="intro compact"><div class="eyebrow"><span class="thin-line"></span> EVIDENCE OVER HYPE</div><h1>Show the work.<br><em>Earn the trust.</em></h1><p>Every capability comes with an honest boundary. No "100% autonomous" labels without actual agent receipts.</p></div>
+        <div class="proof-layout"><div class="proof-card"><p class="kicker">PRODUCT EVIDENCE</p><h2>What this build actually does</h2><div id="checks" class="checks"></div><div class="proof-bottom"><span class="tiny-dot"></span><span>LOCAL ARTIFACT GENERATION · ZERO API COST</span></div></div><div class="proof-card"><p class="kicker">INTEGRATION PATH</p><h2>What comes next</h2><div class="upcoming"><span>01</span><div><b>Connect Ruflo</b><small>Plans, dependency routing and worker claims</small></div><em>NOT CONNECTED</em></div><div class="upcoming"><span>02</span><div><b>Connect actual builders</b><small>Claude, OpenHands, Antigravity via permitted adapters</small></div><em>NOT CONNECTED</em></div><div class="upcoming"><span>03</span><div><b>Independent verification</b><small>Playwright screenshots, tests, evidence manifests</small></div><em>NOT CONNECTED</em></div><div class="upcoming"><span>04</span><div><b>Shareable verified launch</b><small>Review, approval and controlled deployment</small></div><em>NOT CONNECTED</em></div></div></div>
+      </section>
+    </main>
+    <footer><div>GENESIS <b>FOUNDRY</b> <span>— MADE TO MAKE</span></div><span>NO DATA LEAVES THIS PAGE DURING GENERATION · $0 INFERENCE COST</span></footer>
+  </div>
+</div>
+</body>
+</html>
