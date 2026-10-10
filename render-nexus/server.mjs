@@ -3,6 +3,7 @@ import http from 'node:http';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { aguiPreview } from './agui.mjs';
 import { readFile } from 'node:fs/promises';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
@@ -132,7 +133,8 @@ export function createHandler({env=process.env, fetcher=fetch, clock=()=>new Dat
     try { value=JSON.parse(raw.toString('utf8')); }
     catch { throw fail(422,'Invalid record JSON'); }
     const e=validated(value,route,id);
-    return {message_id:id, route, content:e.content, created_at:e.created_at,
+    return {message_id:id, route, conversation_id:e.conversation_id, content:e.content,
+      created_at:e.created_at, expires_at:e.expires_at || null,
       reply_to:e.reply_to || null, transport:'RECORDED_IN_GITHUB', execution:'NOT_VERIFIED'};
   }
   return async function handler(req,res) {
@@ -162,6 +164,11 @@ export function createHandler({env=process.env, fetcher=fetch, clock=()=>new Dat
       if(req.method==='GET' && pathname==='/api/record') {
         const query=new URL(req.url,'http://localhost').searchParams;
         return send(res,200,await record(query.get('route') || '',query.get('id') || ''));
+      }
+      if(req.method==='GET' && pathname==='/api/agui/preview') {
+        const query=new URL(req.url,'http://localhost').searchParams;
+        const rec=await record(query.get('route') || '',query.get('id') || '');
+        return send(res,200,aguiPreview(rec,clock()));
       }
       if(req.method==='POST' && pathname==='/api/message') {
         if(!ready) throw fail(503,'Gateway not configured');
