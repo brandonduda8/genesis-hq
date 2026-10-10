@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Genesis Foundry | Lead-to-Quote</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a href="/" class="brand" aria-label="Genesis Foundry home"><span class="brand-symbol">G</span><span>GENESIS <small>FOUNDRY</small></span></a>
+      <div class="top-actions"><span class="status-pill"><span class="status-dot"></span> LOCAL-FIRST v0.2</span><button class="outline small" id="exportCsv">CSV</button><button class="outline small" id="restoreBackup" hidden>Import JSON</button><input type="file" id="restoreFile" accept="application/json,.json" hidden><button class="outline small" id="exportJson">Backup JSON</button></div>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="eyebrow">GENESIS / BUSINESS SOFTWARE / PROTOTYPE 02</div>
+        <div class="intro-grid">
+          <div><h1>From first inquiry<br>to <em>ready-to-send quote.</em></h1>
+            <p>Keep your customer opportunities, notes, and price estimates together. The work stays in your own local database. Nothing gets emailed or billed automatically.</p></div>
+          <div class="proof"><span class="proof-icon">✓</span><div><strong>Working software, not a simulation.</strong><small>Persistence, real quote math, backups, and event receipts. AI builders are not connected yet.</small></div></div>
+        </div>
+      </section>
+      <section class="stats" aria-label="Pipeline metrics">
+        <article><small>TOTAL LEADS</small><strong id="metricTotal">—</strong><span>Stored in your workspace</span></article>
+        <article><small>QUOTES DRAFTED</small><strong id="metricQuotes">—</strong><span>Editable price estimates</span></article>
+        <article><small>PIPELINE VALUE</small><strong id="metricValue">—</strong><span>Quoted, not earned revenue</span></article>
+        <article><small>WON</small><strong id="metricWon">—</strong><span>Manually marked by you</span></article>
+      </section>
+      <section class="workspace">
+        <aside class="panel pipeline">
+          <div class="panel-title"><div><span class="eyebrow">01 / INTAKE</span><h2>Your pipeline</h2></div><button class="primary" id="newLead">+ New lead</button></div>
+          <div class="filters"><input id="search" placeholder="Search leads, companies, services" aria-label="Search leads" maxlength="120"><select id="filter" aria-label="Filter pipeline stage"><option value="">All stages</option><option value="new">New</option><option value="contacted">Contacted</option><option value="quoted">Quoted</option><option value="won">Won</option><option value="lost">Lost</option></select></div>
+          <div id="leadList" class="lead-list" aria-live="polite"><p class="muted">Loading your workspace…</p></div>
+          <button id="seed" class="text-button" hidden>Try with two synthetic demo leads →</button>
+        </aside>
+        <section class="panel editor" aria-label="Lead editor">
+          <div id="emptyEditor"><div class="empty-illustration">↗</div><h2>Select a lead to get started</h2><p>Or add a new opportunity. Quotes and notes will survive browser restarts.</p></div>
+          <section id="createEditor" hidden>
+            <div class="panel-title"><div><span class="eyebrow">NEW INQUIRY</span><h2>Capture a lead</h2></div><button class="text-button" id="cancelNew">Cancel</button></div>
+            <form id="createForm" class="fields">
+              <label>Customer name <input id="newCustomer" required maxlength="120" placeholder="e.g. Taylor Rivers"></label>
+              <label>Company <input id="newCompany" maxlength="160" placeholder="Optional"></label>
+              <label>Email <input id="newEmail" type="email" maxlength="254" placeholder="Optional"></label>
+              <label>Service requested <input id="newService" required maxlength="160" placeholder="e.g. Storefront renovation"></label>
+              <label>Owner <input id="newOwner" maxlength="80" placeholder="Your name or team"></label>
+              <label class="wide">Notes <textarea id="newNotes" maxlength="2000" placeholder="Needs, budget, timeline…"></textarea></label>
+              <button type="submit" class="primary">Save opportunity</button>
+            </form>
+          </section>
+          <section id="detailEditor" hidden>
+            <div class="panel-title"><div><span class="eyebrow">02 / CUSTOMER RECORD</span><h2 id="detailName">Customer</h2><span id="demoFlag" class="demo-label" hidden>SYNTHETIC DEMO RECORD</span></div><span class="record-id" id="recordVersion"></span></div>
+            <form id="detailForm" class="fields">
+              <label>Customer <input id="editCustomer" required maxlength="120"></label>
+              <label>Company <input id="editCompany" maxlength="160"></label>
+              <label>Email <input id="editEmail" type="email" maxlength="254"></label>
+              <label>Stage <select id="editStage"><option value="new">New</option><option value="contacted">Contacted</option><option value="quoted">Quoted</option><option value="won">Won</option><option value="lost">Lost</option></select></label>
+              <label>Service requested <input id="editService" required maxlength="160"></label>
+              <label>Owner <input id="editOwner" maxlength="80"></label>
+              <label class="wide">Notes <textarea id="editNotes" maxlength="2000"></textarea></label>
+              <button type="submit" class="outline">Save customer changes</button>
+            </form>
+            <div class="quote-head"><div><span class="eyebrow">03 / QUOTE BUILDER</span><h3>Scope & pricing</h3></div><button id="addItem" class="outline small">+ Add line item</button></div>
+            <p class="hint">Draft only. No taxes, payment processing, customer email, or automatic acceptance.</p>
+            <div id="quoteRows" class="quote-rows"></div>
+            <div class="quote-footer"><div><small>ESTIMATED TOTAL</small><strong id="quoteTotal">$0.00</strong></div><button class="primary" id="saveQuote">Save quote draft</button></div>
+          </section>
+        </section>
+      </section>
+      <section class="bottom"><div><span class="eyebrow">04 / VERIFIED LOCAL ACTIVITY</span><h2>What actually happened</h2><p>Real saved operations, not autonomous claims. No outside messages or models are triggered.</p></div><button class="outline small" id="refresh">Refresh records</button><div id="events" class="events">No recorded actions yet.</div></section>
+      <section class="security"><div><span class="eyebrow">ACCESS SETTINGS</span><p>If this workspace is hosted on a private network, enter its owner token. The token stays in this tab only.</p></div><input id="ownerToken" type="password" autocomplete="off" placeholder="Owner token (remote only)" aria-label="Owner token"></section>
+    </main>
+    <footer>GENESIS FOUNDRY <span>Built to create value · Owner-controlled · No automatic outreach · No paid APIs</span></footer>
+    <div role="status" aria-live="polite" id="notice" class="notice" hidden></div>
+  </div>
+</body>
+</html>
