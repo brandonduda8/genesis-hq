@@ -1,0 +1,10 @@
+{
+  "schema": "genesis-browser-plan/v1",
+  "job_id": "example-fixture-preflight",
+  "allowed_origins": ["http://127.0.0.1:8777"],
+  "actions": [
+    {"id": "open", "kind": "navigate", "url": "http://127.0.0.1:8777/demo.html"},
+    {"id": "read", "kind": "text", "role": "heading", "name": "Genesis Owned Browser Fixture"},
+    {"id": "snapshot", "kind": "snapshot"}
+  ]
+}
