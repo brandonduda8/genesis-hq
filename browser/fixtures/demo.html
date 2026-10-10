@@ -1,0 +1,6 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Genesis Browser Fixture</title>
+<style>body{font-family:system-ui;max-width:740px;margin:55px auto;padding:22px;background:#11192b;color:white}label,input,button{display:block;margin:14px 0}input,button{padding:10px;border-radius:8px}#result{color:#a0ebcb}</style>
+<h1>Genesis Owned Browser Fixture</h1><p>This is synthetic data. No account or payment.</p>
+<label for="project">Project</label><input id="project" aria-label="Project" placeholder="Your project">
+<button id="create">Create sample plan</button><div id="result" role="status" aria-live="polite">Waiting for a fixture action</div>
+<script>document.getElementById('create').onclick=()=>{const name=document.getElementById('project').value.trim(); document.getElementById('result').textContent=name ? 'Fixture ready: '+name : 'Enter a project'}</script></html>
