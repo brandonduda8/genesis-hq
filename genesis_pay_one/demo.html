@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; form-action 'none'"/>
+<title>Genesis Pay ONE | Financial Future Lab</title>
+<style>
+  :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:#f1f4f8;background:#08101a;color-scheme:dark}
+  *{box-sizing:border-box}body{margin:0;padding:24px}main{max-width:1140px;margin:0 auto}
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 24px}
+  .brand{display:flex;align-items:center;gap:12px;font-size:1.15rem;font-weight:800;letter-spacing:.5px}.symbol{display:grid;place-items:center;width:44px;height:44px;border-radius:13px;background:#c9e1ff;color:#001b38;font-size:24px}
+  .tag{background:#152536;border:1px solid #33475a;color:#accfe7;border-radius:30px;padding:8px 12px;font-size:12px;font-weight:700}
+  .hero{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:22px;align-items:stretch}
+  .card{border-radius:26px;background:linear-gradient(135deg,#c4e4ea 0%,#648fa7 35%,#1d3853 68%,#0b182d 100%);color:#052134;box-shadow:0 22px 50px #0007;min-height:250px;padding:25px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+  .card:before{content:'';position:absolute;width:280px;height:280px;border:1px solid #ebfaff73;border-radius:50%;right:-130px;top:-130px;box-shadow:0 0 0 38px #bdddf019,0 0 0 84px #d8f6ff17;pointer-events:none}
+  .card .small{font-size:.77rem;letter-spacing:2px;font-weight:800}.card h1{font-size:1.65rem;line-height:1.12;letter-spacing:-.6px;margin:9px 0 3px}.card p{color:#061a2b;font-weight:650;margin:0}.card footer{display:flex;justify-content:space-between;font-size:12px;font-weight:850}
+  .panel{background:#101e2d;border:1px solid #243a4e;padding:22px;border-radius:22px}.intro h2{font-size:1.75rem;letter-spacing:-1px;margin:0 0 8px}.muted{color:#a4b7c7;line-height:1.5}.note{font-size:12px;color:#9cc7e4}.intro p{max-width:560px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.stat{background:#142539;border:1px solid #30465d;border-radius:17px;padding:17px}.stat small{display:block;color:#afc4d3;font-size:12px}.stat strong{display:block;font-size:1.55rem;letter-spacing:-.8px;margin-top:5px}
+  .columns{display:grid;grid-template-columns:1.3fr 1fr;gap:20px}.section-title{font-size:1.15rem;font-weight:750;margin:0 0 13px}
+  label{font-size:13px;color:#c0d3e0;display:block;margin:12px 0 7px;font-weight:650}
+  input[type=text],input[type=number]{background:#071422;color:#eff9ff;border:1px solid #486075;border-radius:12px;width:100%;padding:12px;font-size:15px;min-width:0}
+  input:focus{outline:2px solid #62b0ed;outline-offset:2px}button{background:#c5e2f8;border:0;border-radius:12px;color:#063250;padding:11px 14px;font-size:14px;font-weight:800;cursor:pointer}button.secondary{background:#1b3248;color:#d4ecfa;border:1px solid #335773}button:disabled{opacity:.45;cursor:not-allowed}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px}.input-row{display:flex;gap:8px}.input-row input{flex:1}.switch{display:flex;align-items:center;gap:10px;padding:14px 0;cursor:pointer}.switch input{width:19px;height:19px;accent-color:#8fdab9}.switch label{margin:0}
+  .transaction-list{list-style:none;margin:10px 0 0;padding:0;max-height:325px;overflow:auto}.transaction-list li{display:flex;align-items:center;justify-content:space-between;gap:6px;border-bottom:1px solid #24384a;padding:10px 0}.transaction-list li small{color:#9eb9c9}.pill{font-size:12px;border-radius:99px;background:#1c4356;padding:4px 8px;color:#b9eafb;font-weight:700}.refund{background:none;color:#f8b8b8;padding:3px 6px;font-size:12px}.danger{color:#ffd09b}
+  .slider-row{display:flex;align-items:center;gap:14px}.slider-row input{flex:1;accent-color:#a7dab2}.breakdown{display:grid;gap:9px;margin:14px 0}.breakdown div{background:#183147;border-radius:12px;padding:12px;display:flex;justify-content:space-between;gap:8px}
+  .foot{font-size:12px;color:#96acbd;margin-top:20px;line-height:1.6}.alert{background:#142c36;color:#cfefdb;border:1px solid #35576a;border-radius:14px;padding:12px;margin-top:14px;font-size:13px;min-height:42px}
+  @media(max-width:820px){body{padding:15px}.hero,.columns{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.stat strong{font-size:1.35rem}}
+</style>
+</head>
+<body><main>
+<header><div class="brand"><div class="symbol">G</div>Genesis Pay <span style="font-weight:400">ONE</span></div><span class="tag">OFFLINE CONCEPT / NO REAL MONEY</span></header>
+<section class="hero">
+  <div class="card" aria-label="Unissued concept debit card"><div class="small">GENESIS PAY / ONE</div><div><h1>Spend smarter.<br>Build your future.</h1><p>Flexible spending concept</p></div><footer><span>NO CARD NUMBER / NOT ISSUED</span><span>DEMO</span></footer></div>
+  <div class="panel intro"><span class="tag">YOUR FINANCIAL CO-PILOT</span><h2 style="margin-top:16px">Every purchase can move you forward.</h2><p class="muted">Set aside spare change from everyday spending and preview a self-chosen investment allocation. Your real financial accounts stay untouched.</p><p class="note">Debit today. Credit-building later through a real lending partner. No guaranteed returns.</p></div>
+</section>
+<section class="stats">
+  <div class="stat"><small>Illustrative round-ups</small><strong id="total">$0.00</strong></div>
+  <div class="stat"><small>Until $5 batch threshold</small><strong id="to-threshold">$5.00</strong></div>
+  <div class="stat"><small>Actual money invested</small><strong>$0.00</strong></div>
+</section>
+<section class="columns">
+ <div class="panel">
+  <h2 class="section-title">Spending lab</h2><p class="muted">Only synthetic posted transactions count toward round-ups. Try adding an amount or simulate a refund.</p>
+  <label for="amount">Simulated purchase amount (USD)</label><div class="input-row"><input type="text" inputmode="decimal" id="amount" placeholder="7.35" maxlength="12"/><button id="add">Add purchase</button></div>
+  <div class="row" style="margin-top:20px"><strong>Sample purchases</strong><span class="note" id="count"></span></div>
+  <ul class="transaction-list" id="transactions" aria-label="Synthetic purchase history"></ul>
+  <button class="secondary" id="reset" style="margin-top:15px">Reset demo purchases</button>
+ </div>
+ <div class="panel">
+  <h2 class="section-title">Wealth builder</h2>
+  <div class="switch"><input type="checkbox" id="optin"/><label for="optin">Enable simulated round-ups</label></div>
+  <label for="cash">Illustrative spendable cash (USD)</label><input id="cash" type="text" value="250.00" inputmode="decimal"/>
+  <p class="note">Demo keeps a minimum $50 emergency reserve and waits for $5 in round-ups. Neither balance is a real account.</p>
+  <label for="percent">Your hypothetical allocation: Fund A <span id="fundA">70</span>% / Fund B <span id="fundB">30</span>%</label><div class="slider-row"><input type="range" id="percent" min="0" max="100" value="70" step="5"/></div>
+  <div class="breakdown"><div><span>Qualified for a paper plan</span><strong id="ready">No</strong></div><div><span>Proposed notional amount</span><strong id="batch">$0.00</strong></div></div>
+  <button id="plan" style="width:100%">Preview paper investment</button>
+  <div class="alert" id="message" role="status">Enable the demo option to preview a paper plan.</div>
+ </div>
+</section>
+<p class="foot">Genesis Pay ONE is an independent concept and engineering test. No card, account, lender, bank, credit-bureau relationship or brokerage service has been issued or connected. Investments involve risk and are not FDIC-insured. Real round-ups would require a bank/issuer, broker, confirmed consent, transaction settlement, customer protections and regulatory approvals.</p>
+</main>
+<script>
+(function(){
+ 'use strict';
+ const initial=[735,1210,2000,850,620,545,330,120,101];
+ let purchases=[];let nextId=1;
+ const $=id=>document.getElementById(id);
+ const usd=c=>(c/100).toLocaleString('en-US',{style:'currency',currency:'USD'});
+ function parseCents(text){const t=String(text).trim();if(!/^\d{1,7}(\.\d{1,2})?$/.test(t))return null;const [a,b='']=t.split('.');return Number(a)*100+Number((b+'00').slice(0,2));}
+ function round(c){return (100-(c%100))%100;}
+ function add(c){purchases.push({id:nextId++,amount:c,hold:false});render();}
+ function reset(){purchases=[];nextId=1;initial.forEach(c=>purchases.push({id:nextId++,amount:c,hold:false}));render();}
+ function total(){return purchases.reduce((acc,p)=>acc+(p.hold?0:round(p.amount)),0);}
+ function render(){
+   const cents=total();$('total').textContent=usd(cents);$('to-threshold').textContent=usd(Math.max(0,500-cents));$('count').textContent=purchases.length+' synthetic purchases';
+   const ul=$('transactions');ul.replaceChildren();
+   purchases.slice().reverse().forEach(p=>{
+     const li=document.createElement('li'),info=document.createElement('span'),detail=document.createElement('small'),delta=document.createElement('span'),btn=document.createElement('button');
+     info.textContent='Demo purchase #'+p.id+'  '+usd(p.amount);detail.textContent=p.hold?'Refund hold':'Posted (simulated)';
+     const left=document.createElement('div');left.append(info,document.createElement('br'),detail);
+     delta.textContent=p.hold?'On hold':'+'+usd(round(p.amount));delta.className='pill';
+     btn.className='refund';btn.textContent=p.hold?'Held':'Refund';btn.disabled=p.hold;
+     btn.addEventListener('click',()=>{p.hold=true;render();});
+     const right=document.createElement('div');right.style.textAlign='right';right.append(delta,document.createElement('br'),btn);
+     li.append(left,right);ul.append(li);
+   });
+   $('fundA').textContent=$('percent').value;$('fundB').textContent=100-Number($('percent').value);
+   const cash=parseCents($('cash').value),ready=$('optin').checked&&cents>=500&&cash!==null&&cash>=5000+cents;
+   $('ready').textContent=ready?'Yes - preview':'Not yet';$('batch').textContent=ready?usd(Math.min(2500,cents)):'$0.00';
+   $('plan').disabled=!ready;
+ }
+ $('add').addEventListener('click',()=>{const cents=parseCents($('amount').value);if(cents===null||cents<1){$('message').textContent='Enter a positive amount with at most two decimal places.';return;}add(cents);$('amount').value='';$('message').textContent='Synthetic posted purchase added. No payment made.';});
+ $('reset').addEventListener('click',()=>{reset();$('message').textContent='Reset to synthetic purchases.';});
+ ['optin','percent','cash'].forEach(id=>$(id).addEventListener('input',render));
+ $('plan').addEventListener('click',()=>{
+  render();if($('plan').disabled)return;
+  const amount=Math.min(2500,total()),a=Math.floor(amount*Number($('percent').value)/100),b=amount-a;
+  $('message').textContent='PAPER PLAN ONLY: '+usd(a)+' to user-defined Fund A, '+usd(b)+' to Fund B. No transfer, investment or brokerage order. Market returns unknown.';
+ });
+ reset();
+})();
+</script>
+</body></html>
