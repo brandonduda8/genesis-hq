@@ -1,6 +1,7 @@
 /** Genesis Alliance HQ: authenticated, inert GitHub-mailbox control gateway. */
 import http from 'node:http';
 import { createTransmissionHandler } from './transmission_gateway.mjs';
+import { createCodyGateway } from './cody_gateway.mjs';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -183,7 +184,7 @@ export function createHandler({env=process.env, fetcher=fetch, clock=()=>new Dat
 
 if(process.argv[1] && fileURLToPath(import.meta.url)===process.argv[1]) {
   const port=Number(process.env.PORT || 10000);
-  http.createServer(createTransmissionHandler({legacyHandler:createHandler()})).listen(port,'0.0.0.0',()=>{
+  http.createServer(createCodyGateway({legacyHandler:createTransmissionHandler({legacyHandler:createHandler()})})).listen(port,'0.0.0.0',()=>{
     console.log('Genesis Alliance HQ listening on port '+port+' (no model execution)');
   });
 }
