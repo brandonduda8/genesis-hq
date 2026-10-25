@@ -1,0 +1,24 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {assessFeed,planMessage,verifyTransportReceipt,evaluateVantages,canonical,digest} from './transmission.mjs';
+const NOW=Date.parse('2026-10-25T18:00:00Z');
+const mid='msg-'+'a'.repeat(32);
+function envelope(){const e={schema_version:'1',message_id:mid,conversation_id:'genesis-test',sender:'astra',recipient:'zane',created_at:'2026-10-25T17:00:00Z',msg_type:'ping',content:'hello',content_sha256:digest('hello'),attachments:[]};return {envelope:e,envelope_sha256:digest(canonical(e))}}
+test('canonical JSON sorts keys deterministically',()=>assert.equal(canonical({z:2,a:[{b:1,a:2}]}),'{"a":[{"a":2,"b":1}],"z":2}'));
+test('canonical rejects non JSON values',()=>assert.throws(()=>canonical({x:undefined}),TypeError));
+test('receipt is unverified without ack',()=>assert.equal(verifyTransportReceipt(envelope(),null,{route:'astra-to-zane',id:mid,now:NOW}).state,'PUBLISHED_NO_ACK'));
+test('matching transport ACK does not authenticate identity',()=>{const r=envelope();const ack={message_id:mid,receiver:'zane',acked_at:'2026-10-25T17:01:00Z',envelope_sha256:r.envelope_sha256};const v=verifyTransportReceipt(r,ack,{route:'astra-to-zane',id:mid,now:NOW});assert.equal(v.state,'TRANSPORT_ACK_PRESENT_IDENTITY_UNVERIFIED');assert.equal(v.authenticated,false)});
+test('forged ACK digest rejected',()=>{const r=envelope();assert.equal(verifyTransportReceipt(r,{message_id:mid,receiver:'zane',acked_at:'2026-10-25T17:01:00Z',envelope_sha256:'a'.repeat(64)},{route:'astra-to-zane',id:mid,now:NOW}).state,'ACK_MISMATCH')});
+test('tampered envelope rejected even with ACK',()=>{const r=envelope();r.envelope.content='altered';assert.equal(verifyTransportReceipt(r,null,{route:'astra-to-zane',id:mid,now:NOW}).state,'INVALID_ENVELOPE')});
+test('invalid route rejected',()=>assert.equal(verifyTransportReceipt(envelope(),null,{route:'../../evil',id:mid,now:NOW}).state,'INVALID_REQUEST'));
+test('future ACK rejected',()=>{const r=envelope();assert.equal(verifyTransportReceipt(r,{message_id:mid,receiver:'zane',acked_at:'2026-10-26T20:00:00Z',envelope_sha256:r.envelope_sha256},{route:'astra-to-zane',id:mid,now:NOW}).state,'ACK_MISMATCH')});
+test('feed can be reachable without agents being live',()=>{const a=assessFeed({routes:[{route:'astra-to-zane',ok:true,items:[{message_id:mid,at:'2026-10-25T17:58:00Z'}]}]},{now:NOW});assert.equal(a.transport,'GITHUB_REACHABLE_FROM_RENDER_ONLY');assert.deepEqual(a.verified_live_agents,[]);assert.equal(a.route_observations[0].state,'RECENT_COMMIT_NOT_LIVENESS')});
+test('old messages are stale and unavailable routes explicit',()=>{const a=assessFeed({routes:[{route:'zane-to-astra',ok:true,items:[{message_id:mid,at:'2026-10-20T01:00:00Z'}]},{route:'zane-to-claude',ok:false,items:[]}]},{now:NOW});assert.equal(a.transport,'GITHUB_PARTIAL_FROM_RENDER');assert.equal(a.route_observations[0].state,'STALE_HISTORY_ONLY');assert.equal(a.route_observations[1].state,'GITHUB_ROUTE_UNREACHABLE')});
+test('Claude held from automatic routing',()=>assert.deepEqual(assessFeed({routes:[]},{now:NOW}).suspended_agents,['claude']));
+test('routing cannot automatically execute',()=>{const p=planMessage('Fix the bug and add unit tests',{now:NOW});assert.equal(p.recommended_handler,'astra');assert.equal(p.autonomous_dispatch,false)});
+test('Zane routing blocked by egress without fresh evidence',()=>{const p=planMessage('Investigate the Tailscale proxy issue',{now:NOW});assert.equal(p.recommended_handler,'zane');assert.equal(p.gate,'BLOCKED_EGRESS')});
+test('sensitive requests require owner approval',()=>{const p=planMessage('Deploy payments with a private key',{now:NOW,zaneEgressConfirmed:true});assert.equal(p.gate,'OWNER_APPROVAL_REQUIRED');assert.ok(p.tags.includes('SECRETS'));assert.ok(p.tags.includes('FINANCIAL'))});
+test('invalid request blocked',()=>assert.equal(planMessage('',{now:NOW}).accepted,false));
+test('same-network observations insufficient',()=>{const inputs=[{network_group:'wifi',timestamp_utc:'2026-10-25T17:50:00Z',https_ok:true},{network_group:'wifi',timestamp_utc:'2026-10-25T17:51:00Z',https_ok:false}];assert.equal(evaluateVantages(inputs,{now:NOW}).classification,'INSUFFICIENT_INDEPENDENT_VANTAGES')});
+test('different-network failure detected',()=>{const inputs=[{network_group:'cellular',timestamp_utc:'2026-10-25T17:50:00Z',https_ok:true},{network_group:'provider',timestamp_utc:'2026-10-25T17:51:00Z',https_ok:false}];assert.equal(evaluateVantages(inputs,{now:NOW}).classification,'NETWORK_PATH_DIFFERENCE')});
+test('stale observations excluded',()=>{const inputs=[{network_group:'cellular',timestamp_utc:'2026-10-23T17:50:00Z',https_ok:true},{network_group:'provider',timestamp_utc:'2026-10-25T17:51:00Z',https_ok:false}];assert.equal(evaluateVantages(inputs,{now:NOW}).classification,'INSUFFICIENT_INDEPENDENT_VANTAGES')});
