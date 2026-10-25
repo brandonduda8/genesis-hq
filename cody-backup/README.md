@@ -13,7 +13,7 @@ Use the existing free Render-hosted Genesis Alliance HQ as Cody's **owner-gated 
 
 ## Compute requirements and chosen placement
 
-- **Render Free (existing):** web dashboard and observation receiver ONLY. The plan has 256 MB RAM, spins down after 15 minutes idle, is ephemeral, and shares 750 free instance hours across the workspace per month. No 24/7 worker guarantee; no free persistent disk or free background worker. Avoid unsolicited keep-alive traffic.
+- **Render Free (existing):** web dashboard and observation receiver ONLY. The plan has 512 MB RAM, spins down after 15 minutes idle, is ephemeral, and shares 750 free instance hours across the workspace per month. No 24/7 worker guarantee; no free persistent disk or free background worker. Avoid unsolicited keep-alive traffic.
 - **Cody host (requires owner action):** independent Linux machine with Python 3.11+, stable power, outbound HTTPS to both Render and GitHub, local persistent user storage, and a fleet supervisor/systemd. A local model is optional at first. For genuinely ongoing operation, use an existing authorized always-powered device or an eligible independent free VM with usage/idle-reclamation limits. The owner's mini PC remains on its prior hold until network and rollback verified.
 - **Oracle Cloud Always Free A1** (availability and eligibility not guaranteed): current docs permit up to 2 OCPUs and 12 GB RAM of Arm compute in the home region, not a guarantee of a permanently available VM; idle instances can be reclaimed. Requires owner-controlled account setup and explicit billing controls. Google Cloud e2-micro Always Free is much smaller and not suitable for serious local coding inference.
 
