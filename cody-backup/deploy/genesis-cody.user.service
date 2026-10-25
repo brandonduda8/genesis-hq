@@ -1,0 +1,20 @@
+# Optional Linux user service template for a host that ACTUALLY supports systemd --user.
+# Copy to ~/.config/systemd/user/genesis-cody.service after adjusting checkout path.
+# Zane's existing runtime lacks a systemd user manager; use the fleet supervisor there.
+[Unit]
+Description=Genesis Cody Standby Observer (no execution)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/genesis-hq
+EnvironmentFile=%h/.config/genesis-cody/worker.env
+ExecStart=/usr/bin/python3 -B %h/genesis-hq/cody-backup/cody_backup.py watch --interval 1800
+Restart=on-failure
+RestartSec=30
+NoNewPrivileges=true
+UMask=0077
+
+[Install]
+WantedBy=default.target

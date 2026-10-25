@@ -25,9 +25,24 @@ function render(summary){
   }
   if(!area.childNodes.length)area.append(text('p','No mailbox metadata available','dim'));
 }
+async function refreshCody(){
+  if(!key)return;
+  try{
+    const observation=await api('/api/cody/status');
+    const status=observation.presence||'UNKNOWN';
+    $('codyPresence').textContent=safe(status.replaceAll('_',' '));
+    $('codyNote').textContent=observation.latest?
+      safe('Last report '+observation.latest.observed_at+' / '+observation.latest.state):
+      'No authenticated worker heartbeat yet';
+  }catch{
+    $('codyPresence').textContent='NOT VERIFIED';
+    $('codyNote').textContent='Standby status unavailable';
+  }
+}
 async function refresh(){
   try{render(await api('/api/transmission/summary'));setState('RENDER REACHABLE / IDENTITY UNVERIFIED')}
   catch(e){setState('NOT CONNECTED');$('github').textContent='UNAVAILABLE';$('lastCheck').textContent=safe(e.message)}
+  await refreshCody();
 }
 async function stream(){
   controller=new AbortController();
