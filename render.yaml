@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: genesis-alliance-hq
+    runtime: node
+    plan: free
+    region: ohio
+    branch: feat/render-alliance-nexus-20261009
+    autoDeploy: false
+    buildCommand: npm install --ignore-scripts --no-audit --no-fund
+    startCommand: npm start
+    healthCheckPath: /api/health
