@@ -8,8 +8,9 @@
   },
   "scripts": {
     "start": "node render-nexus/server.mjs",
-    "test:nexus": "node --test render-nexus/test.mjs",
+    "test:nexus": "node --test render-nexus/test.mjs render-nexus/transmission.test.mjs render-nexus/transmission_gateway.test.mjs render-nexus/cody_gateway.test.mjs",
     "test:transmission": "node --test render-nexus/transmission.test.mjs render-nexus/transmission_gateway.test.mjs",
-    "test:all": "node --test render-nexus/test.mjs render-nexus/transmission.test.mjs render-nexus/transmission_gateway.test.mjs"
+    "test:all": "node --test render-nexus/test.mjs render-nexus/transmission.test.mjs render-nexus/transmission_gateway.test.mjs render-nexus/cody_gateway.test.mjs && python3 -B -m unittest discover -s cody-backup/tests -v",
+    "test:cody": "node --test render-nexus/cody_gateway.test.mjs && python3 -B -m unittest discover -s cody-backup/tests -v"
   }
 }
