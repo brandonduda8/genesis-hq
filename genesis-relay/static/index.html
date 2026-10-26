@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Genesis Relay — Secure Pilot</title><link rel="stylesheet" href="/style.css"><script src="/app.js" type="module"></script></head>
+<body><main>
+<header><div class="eyebrow">GENESIS / EMERGENCY NETWORK</div><h1>Secure Courier & NetBird Key Manager</h1><p class="secondary">Independent HTTPS access, with encryption inside your browser. Synthetic-message pilot; not a production secret-sharing service.</p></header>
+<div class="warning"><strong>Important:</strong> The relay uses temporary memory on Render Free. Messages disappear when the service sleeps or restarts. Do not send API keys, SSH keys, Tailscale keys, NetBird setup keys or passwords through chat. The key-manager tab below encrypts data locally and never uploads it; it still needs security review before critical credentials are entrusted to it.</div>
+<section class="panel" aria-labelledby="relay-heading">
+<h2 id="relay-heading">1. Private demo conversation</h2>
+<p class="secondary">Generate a random room and share its link only with an intended tester. The link contains a secret in its <code>#fragment</code>; never post it publicly. Browser encrypts each message before sending.</p>
+<div class="actions"><button id="createRoom">Create test room</button><button id="copyRoom" disabled>Copy room invite</button><button id="refresh" disabled>Refresh inbox</button></div>
+<p id="roomStatus" class="status" aria-live="polite">No demo room open.</p>
+<label for="message">Synthetic test message — no sensitive information</label>
+<textarea id="message" rows="2" maxlength="1200" placeholder="GENESIS_ACK — synthetic only" disabled></textarea>
+<div class="actions"><button id="send" disabled>Send encrypted test message</button><span id="sendStatus" class="status" aria-live="polite"></span></div>
+<div id="messages" class="messages" aria-live="polite"></div>
+</section>
+<section class="panel" aria-labelledby="vault-heading">
+<h2 id="vault-heading">2. NetBird setup key — local encrypted storage</h2>
+<p class="secondary">Your key remains in this browser, encrypted with a strong passphrase. No server endpoint receives the key or passphrase. Browser storage can be erased; keep a separate trusted backup. Never use a four- or six-digit PIN as the master passphrase.</p>
+<label for="netbirdKey">Setup key (entered on your own device only)</label>
+<input id="netbirdKey" type="password" autocomplete="off" spellcheck="false" placeholder="Enter privately; never copy into chat">
+<label for="masterPass">Master passphrase — at least 16 characters</label>
+<input id="masterPass" type="password" autocomplete="new-password" spellcheck="false" placeholder="Use a unique, long passphrase">
+<div class="actions"><button id="saveKey">Encrypt on this device</button><button id="unlockKey">Unlock locally</button><button id="deleteKey" class="danger">Delete encrypted local record</button></div>
+<p class="status" id="keyStatus" aria-live="polite">Nothing sent to the server. This remains an experimental client-side vault.</p>
+<output id="keyOutput" class="secret" hidden></output>
+<p class="secondary">For real machine enrollment, prefer <a href="https://app.netbird.io/" target="_blank" rel="noreferrer noopener">NetBird's official dashboard</a> and one-off short-lived keys. Agent access must use a separately authorized, device-scoped action—not disclosure of this key to ChatGPT.</p>
+</section>
+<footer><p>Genesis v0.1 • No API tokens configured • No remote commands • No live SSH • <a href="https://github.com/brandonduda8/astra-zane-bridge/issues/103" target="_blank" rel="noopener noreferrer">Durable nonsecret GitHub mailbox</a></p></footer>
+</main></body></html>
