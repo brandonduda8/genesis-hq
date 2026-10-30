@@ -91,7 +91,9 @@ def run(work_order: Path, hq: Path, astra: Path, cli: str, timeout: int):
         raise ValueError('Claude Code executable unavailable')
 
     # Separate lock covers direct calls that bypass worker-bridge's shared lock.
-    with (outbox / '.claude-mission.lock').open('a+') as lock:
+    lock_path = outbox / '.claude-mission.lock'
+    lock_fd = os.open(lock_path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+    with os.fdopen(lock_fd, 'r+') as lock:
         try:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as exc:
@@ -156,7 +158,8 @@ def run(work_order: Path, hq: Path, astra: Path, cli: str, timeout: int):
         # Exclusive create refuses clobber and replay. JSON receipt written last.
         report_path = outbox / (stem + '.claude-report.md')
         receipt_path = outbox / (stem + '.claude-receipt.json')
-        if report_path.exists() or receipt_path.exists():
+        if (report_path.exists() or receipt_path.exists() or
+                report_path.is_symlink() or receipt_path.is_symlink()):
             raise ValueError('work-order ID already used; choose a new ID')
         if succeeded:
             with report_path.open('xb') as f:
