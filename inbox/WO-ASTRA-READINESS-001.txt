@@ -1,0 +1,5 @@
+Audit the staged ASTRA architecture files. Identify (a) the canonical Genesis authority,
+(b) what the ASTRA workspace MCP actually does, (c) how the existing HQ worker bridge
+relates to Cody and A2A, (d) five concrete integration gaps for a real deployment,
+(e) an acceptance test for the next small approved phase. Do not claim a running host,
+authenticated agent, or independent verification. Produce a concise evidence-based report.
