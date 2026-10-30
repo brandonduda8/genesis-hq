@@ -122,6 +122,21 @@ sys.exit(3)
         self.assertEqual(self.invoke().returncode, 2)
         self.assertFalse(self.log.exists())
 
+    def test_outbox_report_symlink_is_not_overwritten(self):
+        target = self.root / 'victim'
+        target.write_text('unchanged')
+        report = self.hq / 'outbox' / 'WO-ASTRA-001.claude-report.md'
+        report.symlink_to(target)
+        self.assertEqual(self.invoke().returncode, 2)
+        self.assertEqual(target.read_text(), 'unchanged')
+
+    def test_lock_symlink_is_refused(self):
+        target = self.root / 'victim'
+        target.write_text('unchanged')
+        (self.hq / 'outbox' / '.claude-mission.lock').symlink_to(target)
+        self.assertEqual(self.invoke().returncode, 2)
+        self.assertEqual(target.read_text(), 'unchanged')
+
     def test_rejects_large_work_order(self):
         self.wo.write_text('A' * 4097)
         self.assertEqual(self.invoke().returncode, 2)
