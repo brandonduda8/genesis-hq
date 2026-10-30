@@ -14,8 +14,10 @@
 # One-heavy-worker policy: run holds an exclusive flock; a second concurrent
 # run exits 3 immediately instead of stacking.
 set -u
-BIN="$HOME/workspace/bin"
-LOCK="$HOME/workspace/genesis-os/state/worker-bridge.lock"
+BIN="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+STATE_DIR="$HOME/workspace/genesis-os/state"
+[ -d "$STATE_DIR" ] || STATE_DIR="$HOME/.local/state/genesis"
+LOCK="$STATE_DIR/worker-bridge.lock"
 
 lane_status() { # $1 = lane name; prints "lane=<name> status=<READY|DOWN|NEEDS_LOGIN> detail=<...>"
   case "$1" in
@@ -56,6 +58,7 @@ case "${1:?usage: worker-bridge.sh probe OR worker-bridge.sh run LANE WO-FILE}" 
       *) echo "unknown lane: $LANE (claude|codex|gemini)" >&2; exit 2 ;;
     esac
     [ -x "$RUNNER" ] || { echo "runner not executable: $RUNNER" >&2; exit 2; }
+    mkdir -p "$STATE_DIR"
     # NOTE: lock on an fd, NOT `flock file cmd || busy` — the || form also fires
     # when the runner itself fails, misreporting a failed run as "busy".
     exec 9>"$LOCK"

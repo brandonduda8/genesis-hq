@@ -1,16 +1,9 @@
-#!/bin/bash
-# team-claude.sh — run one bounded Claude Code work order from the team inbox.
-# Usage: team-claude.sh <work-order-file>
-# The worker may only read inside genesis-os and run shell commands; all
-# writes go to the outbox result file named in the work order. One mission at
-# a time (one-heavy-worker policy) — never run two of these concurrently.
-set -u
-WO="${1:?usage: team-claude.sh <work-order-file>}"
-GENESIS="$HOME/workspace/genesis-os"
-PROMPT="$(cat "$WO")"
-
-exec "$HOME/workspace/.npm-global/bin/claude" -p \
-  --add-dir "$GENESIS" \
-  --allowedTools "Bash" "Read" "Write" \
-  --append-system-prompt "You are Claude Code, a bounded worker on Brandon's engineering team. Your operator is Muse (Zane). Do ONLY what the work order says. Never edit files unless the work order explicitly tells you to. Never commit, push, restart services, or reach the network beyond localhost. Write your deliverable to the outbox path named in the work order. If anything is ambiguous, report it instead of guessing." \
-  "$PROMPT"
+#!/usr/bin/env bash
+# Bounded Claude worker: no Bash/Write/Edit/Web/MCP tool access in its first audit lane.
+set -euo pipefail
+if [ "$#" -ne 1 ]; then echo 'usage: team-claude.sh <HQ/inbox/WO-*.txt>' >&2; exit 2; fi
+# Installed by the existing HQ provisioner alongside this script.
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+HQ_ROOT="${GENESIS_HQ_ROOT:-$HOME/workspace/genesis-hq}"
+ASTRA_ROOT="${GENESIS_ASTRA_ROOT:-$HOME/workspace/astra-zane-bridge}"
+exec python3 "$SCRIPT_DIR/claude-mission.py" "$1" --hq-root "$HQ_ROOT" --astra-root "$ASTRA_ROOT" --claude-bin "${GENESIS_CLAUDE_BIN:-claude}"

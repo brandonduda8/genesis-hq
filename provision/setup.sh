@@ -11,6 +11,7 @@ echo "=== Genesis HQ provisioning ==="
 # 1. Worker bridge (Claude / Codex / Gemini lanes)
 mkdir -p "$BIN_DIR"
 cp "$REPO_DIR/bin/"*.sh "$BIN_DIR/"
+cp "$REPO_DIR/bin/claude-mission.py" "$BIN_DIR/"
 chmod +x "$BIN_DIR/"*.sh
 if ! grep -q 'export PATH="$HOME/bin:$PATH"' "$HOME/.bashrc" 2>/dev/null; then
   echo 'export PATH="$HOME/bin:$PATH"' >> "$HOME/.bashrc"
