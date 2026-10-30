@@ -5,6 +5,7 @@
 # Usage:
 #   worker-bridge.sh probe                 # one line per lane: READY / DOWN / NEEDS_LOGIN
 #   worker-bridge.sh run <lane> <wo-file>  # run one work order, flock-guarded
+#   worker-bridge.sh fleet [--json]         # read-only, evidence-labelled fleet observation
 #
 # Lanes: claude (Claude Code, Brandon's Pro OAuth), codex (ChatGPT, codex CLI),
 #        gemini (Gemini CLI, free-tier API key).
@@ -44,6 +45,14 @@ lane_status() { # $1 = lane name; prints "lane=<name> status=<READY|DOWN|NEEDS_L
 case "${1:?usage: worker-bridge.sh probe OR worker-bridge.sh run LANE WO-FILE}" in
   probe)
     for lane in claude codex goose gemini; do lane_status "$lane"; done
+    ;;
+  fleet)
+    # Safe observation only: never invokes an agent or tests authentication.
+    SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+    [ -f "$SCRIPT_DIR/fleet-status.sh" ] ||
+      { echo "fleet observer not installed beside worker bridge" >&2; exit 2; }
+    shift
+    exec bash "$SCRIPT_DIR/fleet-status.sh" "$@"
     ;;
   run)
     LANE="${2:?lane required: claude, codex, or gemini}"
