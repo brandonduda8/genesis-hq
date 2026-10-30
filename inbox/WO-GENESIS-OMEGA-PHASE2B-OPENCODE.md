@@ -66,12 +66,50 @@ The owner's pasted report claims:
 - **StarNet:** keep BLOCKED until NetBird reauthentication is completed by the owner and verified. Do not bypass it or silently substitute another transport.
 - **Genesis Core:** design an adapter to canonical existing mission/approval/evidence paths. No qualification/financial DB mutation pending review.
 
+## Phase E — connect the existing Claude Code worker to ASTRA and Genesis Anchor
+
+**Owner addendum:** "and please have it connect claude code." Execute this phase in the **same** Phase 2B assignment. Do not start a new AI system, copy the workspace, replace OpenCode, or treat ChatGPT/GitHub PRs as proof a worker is running.
+
+### Identify the existing integration sources
+
+- Existing **ASTRA canonical workspace/MCP/Claude SDK adapter**: `brandonduda8/astra-zane-bridge`, draft PR **#117**, branch `feat/astra-canonical-workspace-mcp`; inspect `CLAUDE.md`, `.mcp.json`, `shared/astra-workspace/README.md`, `shared/astra-workspace/claude_sdk_bridge.py`, `shared/astra-workspace/launch_mcp.py`, and `MASTER_DESIGN.md`.
+- Existing **bounded Claude Code mission runner**: `brandonduda8/genesis-hq`, draft PR **#18**, branch `feat/astra-claude-bounded-mission-20261029`; inspect `bin/team-claude.sh`, `bin/worker-bridge.sh`, `inbox/WO-ASTRA-READINESS-001.txt`, its Python helper, tests and runbook.
+- Both are **draft** implementations and may conflict with other bridge PRs. Inspect the exact actual commits and review diffs. Do **not** merge, cherry-pick into production, or overwrite working files without a reviewed reconciliation.
+
+### On-host Claude Code preflight (read-only)
+
+1. Run `command -v claude` and, if available, `claude --version`; determine which user/host owns the installation. **Do not install automatically.** The owner previously reported `claude: command not found` in the `brandon@genesis-s1` home shell; recheck rather than assuming it changed. If missing, report `BLOCKED_CLAUDE_NOT_INSTALLED` plus the minimal approved user-level install proposal.
+2. Where supported by this version, check `claude auth status` **without echoing JSON or secret-bearing fields into logs/AI context**; record only an allowlisted `signed_in=true/false/unknown`, auth mode and exit state. If login is required, give the owner a direct interactive `claude`/`/login` instruction on their machine and **STOP awaiting their sign-in**; never ask them for tokens, authorization codes, cookies, credentials, or a credentials file.
+3. Check subscription vs API/provider billing mode locally. **Do not assume a Claude subscription covers unattended Agent SDK/API usage**. If API credentials, provider overrides or chargeable requests are configured, block model requests until the owner explicitly approves a price/budget. No paid fallback; do not turn on extra usage.
+4. Check Python/SDK only if the existing SDK adapter is the selected route; use an existing compatible venv. Do not `sudo` or install Python/Node globally without a separate approved change. Confirm actual SDK version/features against local runtime, not just the manifest.
+5. Inspect resources so the machine is not overloaded; one heavy worker at a time, with bounded time and turns.
+
+### Connect through canonical existing interfaces (not via an open remote shell)
+
+- Preferred first slice: attach **Claude Code's read-only mission runner** to ASTRA's checked-out canonical design and local stdio MCP server, using existing pilot code from PR #18 and PR #117. The `.mcp.json` declaration by itself does not mean a client is connected.
+- Use only permissioned read-only tools for this test; prevent `Bash`, `Write`, `Edit`, remote arbitrary commands, privileged subagents, credential injection, and unapproved MCP tools. Audit version-specific CLI/SDK flags and tool permissions before running.
+- If model access is verified to be within the owner's already-authorized subscription usage, run **one** explicit, tightly bounded, read-only ASTRA readiness mission (or SDK status/project-map query) and save the response as `DELIVERED_UNVERIFIED`. Owner's request to connect Claude permits only this minimally scoped smoke test—not paid APIs, autonomous production access, or unlimited background calls.
+- Independently compare the response with the checked-in ASTRA references. A CLI login check, MCP handshake or generated summary alone does **not** prove that Claude is a production worker.
+- Add a **read-only Claude worker capability/status adapter** to the existing isolated Anchor pilot only **if** a reviewed Genesis adapter contract already supports it safely; otherwise deliver the typed adapter proposal and tests on a branch. Anchor must never send arbitrary prompts, shell commands or private code to Claude via an unauthenticated endpoint.
+- Any production Anchor wiring, persistent Claude worker service, public network/port, cross-host credential bridge, and spending requires separate, explicit owner approval after independent tests.
+
+### Claude acceptance evidence
+
+Record in the Phase 2B receipt:
+- exact ASTRA/HQ source revisions, host/OS/user and Claude CLI/SDK version;
+- `NOT_INSTALLED`, `NEEDS_OWNER_LOGIN`, `AUTHENTICATED`, `MCP_CONNECTED`, `MISSION_DELIVERED_UNVERIFIED` or `BLOCKED` with evidence timestamps;
+- the MCP `initialize`/`tools/list` handshake result (no secret values), one bounded mission outcome, test exit codes and receipt hash;
+- status of the Anchor-side capability adapter, independent verifier verdict, and any remaining owner tap.
+
+**Acceptable partial result:** the Anchor isolated pilot stays safe and a precise Claude sign-in/install blocker is recorded. **Unacceptable:** pretending Claude connected, bypassing login with copied credentials, or silently consuming paid API tokens.
+
 ## Required final deliverables
 
 1. A non-secret receipt under the existing `genesis-os/war-room/` directory named `GENESIS-OMEGA-PHASE2B-RECEIPT.md` (if the path exists and is writable), with timestamp, source commit, tested ports, state paths (no secrets), test outcomes, systemd state and exact rollback.
 2. One machine-readable status summary (if supported) distinguishing `REPORTED`, `OBSERVED`, `VERIFIED`, `BLOCKED`.
 3. Minimal reviewable code changes on a branch if needed; no automatic merge, deployment to public endpoints or production cutover.
 4. If the isolated user service went live, show independent service-readiness evidence and whether it survives a **pilot-only** restart. If it did not, state exactly why.
-5. List next owner decision(s) without asking the owner to repeat information already supplied.
+5. Include Claude Code preflight/auth/MCP/one-mission result and typed Anchor integration status, or exact blocker. Never include credentials or claim SDK subscription entitlements without confirmation.
+6. List next owner decision(s) without asking the owner to repeat information already supplied.
 
-**Acceptance:** no production disruption; independent repeat of critical tests; at most one new isolated, user-level pilot service genuinely confirmed; private Android/OpenClaw follow-up planned; StarNet remains blocked until independently recovered.
+**Acceptance:** no production disruption; independent repeat of critical tests; at most one new isolated, user-level pilot service genuinely confirmed; private Android/OpenClaw follow-up planned; Claude Code integrated through ASTRA if verifiable (otherwise precisely blocked); StarNet remains blocked until independently recovered.
