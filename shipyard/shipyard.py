@@ -5,6 +5,7 @@ No scheduler, GitHub write, payments, or secrets. Uses existing Genesis HQ worke
 A hash-matched APPROVED marker is required before any agent is invoked.
 """
 import argparse
+import fcntl
 import hashlib
 import json
 import re
@@ -83,29 +84,38 @@ def dispatch(bus: Path, order_id: str, lane: str, execute=False,
     result_dir = (receipt_dir or (bus / "shipyard-receipts")).resolve()
     result_dir.mkdir(parents=True, exist_ok=True)
     receipt_file = result_dir / (order_id + "-" + digest[:16] + "-" + lane + ".json")
-    if receipt_file.exists():
-        raise GateError("This order has already been dispatched on this host (receipt exists)")
-    # No shell=True; do not capture or print model output/credentials in receipt.
-    try:
-        result = subprocess.run(["bash", str(bridge), "run", lane, str(order)],
-                                check=False)
-        status, code = "WORKER_EXIT_ZERO", result.returncode
-    except OSError:
-        status, code = "WORKER_LAUNCH_FAILED", 127
-    receipt = {
-        "schema": "genesis.shipyard.dispatch/1.0",
-        "order_id": order_id, "order_sha256": digest, "lane": lane,
-        "finished_at_utc": datetime.now(timezone.utc).isoformat(),
-        "result": status if code == 0 else "WORKER_FAILED",
-        "exit_code": code,
-        "qualification": "Exit code is not proof of tested code, reviewed PR, or a shipped product."
-    }
-    # Exclusive creation prevents two dispatches from recording a second receipt.
-    with receipt_file.open("x", encoding="utf-8") as f:
-        json.dump(receipt, f, indent=2)
+    # Lock before starting work: concurrent callers must never launch the same
+    # order twice. A STARTED receipt survives a crash and blocks silent replay.
+    with (result_dir / ".dispatch.lock").open("a+", encoding="utf-8") as lock:
+        fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
+        if receipt_file.exists():
+            raise GateError("This order has already been dispatched (receipt exists)")
+        receipt = {
+            "schema": "genesis.shipyard.dispatch/1.0",
+            "order_id": order_id, "order_sha256": digest, "lane": lane,
+            "started_at_utc": datetime.now(timezone.utc).isoformat(),
+            "result": "STARTED_NOT_VERIFIED",
+            "exit_code": None,
+            "qualification": "Exit code is not proof of tested code, reviewed PR, or a shipped product."
+        }
+        with receipt_file.open("x", encoding="utf-8") as f:
+            json.dump(receipt, f, indent=2)
+        # No shell=True; do not capture or print model output/credentials in receipt.
+        try:
+            result = subprocess.run(["bash", str(bridge), "run", lane, str(order)],
+                                    check=False)
+            code = result.returncode
+        except OSError:
+            code = 127
+        receipt.update(
+            result="WORKER_EXIT_ZERO" if code == 0 else "WORKER_FAILED",
+            exit_code=code,
+            finished_at_utc=datetime.now(timezone.utc).isoformat()
+        )
+        # The STARTED receipt existed before the worker ran; no duplicate launch.
+        receipt_file.write_text(json.dumps(receipt, indent=2), encoding="utf-8")
     print(f"Dispatch receipt: {receipt_file} (exit={code})")
     return code
-
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Genesis Shipyard — evidence-first developer team")
