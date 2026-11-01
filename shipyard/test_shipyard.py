@@ -32,7 +32,7 @@ class ShipyardGateTests(unittest.TestCase):
             "wo_sha256": hashlib.sha256(self.order.read_bytes()).hexdigest()
         }))
 
-    def claim(self):
+    def claim(self, by="codex"):
         claimed = self.root / "queue" / "claimed"
         claimed.mkdir()
         self.order = self.order.rename(claimed / self.order.name)
@@ -40,7 +40,7 @@ class ShipyardGateTests(unittest.TestCase):
         digest = hashlib.sha256(self.order.read_bytes()).hexdigest()
         (claimed / (self.order_id + ".CLAIM.json")).write_text(json.dumps({
             "id": self.order_id,
-            "claimed_by": "claude",
+            "claimed_by": by,
             "approval_sha256": digest
         }))
 
@@ -119,6 +119,28 @@ class ShipyardGateTests(unittest.TestCase):
         entries = shipyard.products()
         self.assertEqual([x["priority"] for x in entries], [1, 2, 3, 4])
         self.assertEqual(len({x["id"] for x in entries}), len(entries))
+    # --- Claude review of PR #20: one order runs once on any lane; the claim's lane must match the dispatch lane.
+
+    def _bridge(self):
+        bridge = self.root / "worker-bridge.sh"
+        bridge.write_text("#!/usr/bin/env bash\nexit 0\n")
+        return bridge
+
+    def test_same_order_cannot_run_again_on_another_lane(self):
+        self.claim(by="codex")
+        bridge, d = self._bridge(), self.root / "receipts"
+        shipyard.dispatch(self.root, self.order_id, "codex", True, bridge, d)
+        with self.assertRaises(shipyard.GateError):
+            shipyard.dispatch(self.root, self.order_id, "claude", True, bridge, d)
+
+    def test_claim_lane_must_match_dispatch_lane(self):
+        self.claim(by="claude")
+        with self.assertRaises(shipyard.GateError):
+            shipyard.dispatch(self.root, self.order_id, "codex", True, self._bridge(), self.root / "receipts")
+
+    def test_codex_claimed_order_runs_on_codex(self):
+        self.claim(by="codex")
+        self.assertEqual(0, shipyard.dispatch(self.root, self.order_id, "codex", True, self._bridge(), self.root / "receipts"))
 
 
 if __name__ == "__main__":
