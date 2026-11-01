@@ -15,7 +15,7 @@
 # concurrently.
 set -u
 WO="${1:?usage: team-gemini.sh <work-order-file>}"
-GEMINI_BIN="$HOME/workspace/bin/gemini"
+GEMINI_BIN="${GENESIS_GEMINI_BIN:-$(command -v gemini 2>/dev/null || true)}"
 [ -x "$GEMINI_BIN" ] || { echo "gemini wrapper not found" >&2; exit 2; }
 [ -f "$WO" ] || { echo "no such work order: $WO" >&2; exit 2; }
 
