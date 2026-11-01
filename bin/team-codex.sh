@@ -14,7 +14,8 @@
 # concurrently. Requires `codex login` (Brandon's tap) before first use.
 set -u
 WO="${1:?usage: team-codex.sh <work-order-file>}"
-GENESIS="$HOME/workspace/genesis-os"
+GENESIS="${GENESIS_WORKSPACE:-$HOME/workspace/genesis-os}"
+[ -d "$GENESIS" ] || { echo "Genesis workspace missing: $GENESIS (clone it or set GENESIS_WORKSPACE)" >&2; exit 2; }
 CODEX_BIN="${CODEX_BIN:-/opt/hatch-image/bin/codex}"
 command -v "$CODEX_BIN" >/dev/null 2>&1 || CODEX_BIN="$(command -v codex || true)"
 [ -n "$CODEX_BIN" ] || { echo "codex CLI not found" >&2; exit 2; }
