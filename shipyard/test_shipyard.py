@@ -32,6 +32,31 @@ class ShipyardGateTests(unittest.TestCase):
             "wo_sha256": hashlib.sha256(self.order.read_bytes()).hexdigest()
         }))
 
+    def claim(self):
+        claimed = self.root / "queue" / "claimed"
+        claimed.mkdir()
+        self.order = self.order.rename(claimed / self.order.name)
+        self.marker = self.marker.rename(claimed / self.marker.name)
+        digest = hashlib.sha256(self.order.read_bytes()).hexdigest()
+        (claimed / (self.order_id + ".CLAIM.json")).write_text(json.dumps({
+            "id": self.order_id,
+            "claimed_by": "claude",
+            "approval_sha256": digest
+        }))
+
+    def test_approved_but_unclaimed_order_cannot_dispatch(self):
+        with self.assertRaises(shipyard.GateError):
+            shipyard.dispatch(self.root, self.order_id, "codex", execute=True)
+
+    def test_corrupted_claim_blocked(self):
+        self.claim()
+        p = self.order.parent / (self.order_id + ".CLAIM.json")
+        obj = json.loads(p.read_text())
+        obj["approval_sha256"] = "0" * 64
+        p.write_text(json.dumps(obj))
+        with self.assertRaises(shipyard.GateError):
+            shipyard.dispatch(self.root, self.order_id, "codex", execute=True)
+
     def test_valid_approval(self):
         self.assertEqual(shipyard.approved_order(self.root, self.order_id)[0], self.order)
 
@@ -57,6 +82,7 @@ class ShipyardGateTests(unittest.TestCase):
             shipyard.approved_order(self.root, "../../etc/shadow")
 
     def test_dry_run_never_launches_runner(self):
+        self.claim()
         with patch.object(shipyard.subprocess, "run") as run:
             self.assertEqual(shipyard.dispatch(self.root, self.order_id, "codex"), 0)
             run.assert_not_called()
@@ -66,6 +92,7 @@ class ShipyardGateTests(unittest.TestCase):
             shipyard.dispatch(self.root, self.order_id, "shell", execute=True)
 
     def test_valid_order_exits_and_writes_receipt(self):
+        self.claim()
         bridge = self.root / "worker-bridge.sh"
         bridge.write_text("#!/usr/bin/env bash\nexit 0\n")
         receipt_dir = self.root / "receipts"
@@ -79,6 +106,7 @@ class ShipyardGateTests(unittest.TestCase):
             self.assertIn("not proof", record["qualification"])
 
     def test_repeat_dispatch_blocked(self):
+        self.claim()
         bridge = self.root / "worker-bridge.sh"
         bridge.write_text("#!/usr/bin/env bash\nexit 0\n")
         d = self.root / "receipts"
