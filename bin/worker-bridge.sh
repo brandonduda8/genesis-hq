@@ -14,13 +14,13 @@
 # One-heavy-worker policy: run holds an exclusive flock; a second concurrent
 # run exits 3 immediately instead of stacking.
 set -u
-BIN="$HOME/workspace/bin"
-LOCK="$HOME/workspace/genesis-os/state/worker-bridge.lock"
+BIN="${GENESIS_WORKER_BIN:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
+LOCK="${GENESIS_WORKER_LOCK:-$HOME/.local/state/genesis-hq/worker-bridge.lock}"
 
 lane_status() { # $1 = lane name; prints "lane=<name> status=<READY|DOWN|NEEDS_LOGIN> detail=<...>"
   case "$1" in
     claude)
-      if [ -x "$HOME/workspace/.npm-global/bin/claude" ] && [ -f "$HOME/.claude/.credentials.json" ]; then
+      if command -v claude >/dev/null 2>&1 && [ -f "$HOME/.claude/.credentials.json" ]; then
         s=READY; d=claude-code-pro-oauth
       else s=DOWN; d=missing-cli-or-oauth; fi ;;
     codex)
@@ -58,6 +58,7 @@ case "${1:?usage: worker-bridge.sh probe OR worker-bridge.sh run LANE WO-FILE}" 
     [ -x "$RUNNER" ] || { echo "runner not executable: $RUNNER" >&2; exit 2; }
     # NOTE: lock on an fd, NOT `flock file cmd || busy` — the || form also fires
     # when the runner itself fails, misreporting a failed run as "busy".
+    mkdir -p "$(dirname "$LOCK")" || { echo "cannot create lock directory" >&2; exit 2; }
     exec 9>"$LOCK"
     flock -n 9 \
       || { echo "bridge busy: another heavy worker is running (one-heavy-worker policy)" >&2; exit 3; }

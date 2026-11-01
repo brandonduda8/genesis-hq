@@ -1,0 +1,35 @@
+name: genesis-shipyard-tests
+on:
+  pull_request:
+    paths:
+      - "shipyard/**"
+      - "bin/worker-bridge.sh"
+      - "bin/team-claude.sh"
+      - "bin/team-gemini.sh"
+      - ".github/workflows/shipyard-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Python syntax and offline approval/dispatch tests
+        run: |
+          python -m py_compile shipyard/shipyard.py
+          python -m unittest discover -s shipyard -p "test_*.py" -v
+      - name: Shell launcher syntax
+        run: |
+          bash -n bin/worker-bridge.sh
+          bash -n bin/team-claude.sh
+          bash -n bin/team-codex.sh
+          bash -n bin/team-gemini.sh
+      - name: Show product queue (no external API or model calls)
+        run: python shipyard/shipyard.py queue
