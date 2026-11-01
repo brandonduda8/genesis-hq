@@ -25,7 +25,7 @@ class GateError(ValueError):
     pass
 
 
-def approved_order(bus: Path, order_id: str):
+def approved_order(bus: Path, order_id: str, claimed: bool = False):
     """Validate the existing empire-handoffs bus approval, not a GitHub issue label."""
     if not ORDER_RE.fullmatch(order_id):
         raise GateError("Invalid work-order ID")
@@ -33,11 +33,11 @@ def approved_order(bus: Path, order_id: str):
     protocol = root / "PROTOCOL.md"
     if not protocol.is_file():
         raise GateError("Not an empire-handoffs checkout (PROTOCOL.md missing)")
-    folder = root / "queue" / "approved"
+    folder = root / "queue" / ("claimed" if claimed else "approved")
     order = folder / (order_id + ".md")
     approval = folder / (order_id + ".APPROVED")
     if not order.is_file() or not approval.is_file():
-        raise GateError("Order is not in the approved bus queue")
+        raise GateError("Order or approval marker not found in requested bus state")
     contents = order.read_bytes()
     try:
         marker = json.loads(approval.read_text(encoding="utf-8"))
@@ -51,6 +51,17 @@ def approved_order(bus: Path, order_id: str):
         or marker.get("wo_sha256") != digest
     ):
         raise GateError("Approval marker missing/invalid or work order changed")
+    if claimed:
+        claim = folder / (order_id + ".CLAIM.json")
+        try:
+            marker_claim = json.loads(claim.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            raise GateError("Claimed order has no readable claim receipt")
+        if (not isinstance(marker_claim, dict)
+                or marker_claim.get("id") != order_id
+                or marker_claim.get("claimed_by") != "claude"
+                or marker_claim.get("approval_sha256") != digest):
+            raise GateError("Claim does not match the approved work order")
     return order, digest
 
 
@@ -74,7 +85,7 @@ def dispatch(bus: Path, order_id: str, lane: str, execute=False,
              bridge: Path = BRIDGE, receipt_dir: Path | None = None):
     if lane not in LANES:
         raise GateError("Unknown worker lane")
-    order, digest = approved_order(bus, order_id)
+    order, digest = approved_order(bus, order_id, claimed=True)
     if not execute:
         print(f"VALID APPROVAL: {order_id}; lane={lane}; sha256={digest}")
         print("DRY RUN ONLY: pass --execute to invoke the existing worker bridge.")
@@ -125,7 +136,7 @@ def main(argv=None):
     v = sub.add_parser("verify", help="Verify bus approval without starting an agent")
     v.add_argument("--bus", type=Path, required=True)
     v.add_argument("--id", required=True)
-    d = sub.add_parser("dispatch", help="Run one approved work order using existing HQ bridge")
+    d = sub.add_parser("dispatch", help="Run one already-CLAIMED, approved order via HQ bridge")
     d.add_argument("--bus", type=Path, required=True)
     d.add_argument("--id", required=True)
     d.add_argument("--lane", choices=LANES, required=True)
