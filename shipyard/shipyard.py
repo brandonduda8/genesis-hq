@@ -25,7 +25,7 @@ class GateError(ValueError):
     pass
 
 
-def approved_order(bus: Path, order_id: str, claimed: bool = False):
+def approved_order(bus: Path, order_id: str, claimed: bool = False, lane: str | None = None):
     """Validate the existing empire-handoffs bus approval, not a GitHub issue label."""
     if not ORDER_RE.fullmatch(order_id):
         raise GateError("Invalid work-order ID")
@@ -59,7 +59,8 @@ def approved_order(bus: Path, order_id: str, claimed: bool = False):
             raise GateError("Claimed order has no readable claim receipt")
         if (not isinstance(marker_claim, dict)
                 or marker_claim.get("id") != order_id
-                or marker_claim.get("claimed_by") != "claude"
+                or marker_claim.get("claimed_by") not in LANES
+                or (lane is not None and marker_claim.get("claimed_by") != lane)
                 or marker_claim.get("approval_sha256") != digest):
             raise GateError("Claim does not match the approved work order")
     return order, digest
@@ -85,7 +86,8 @@ def dispatch(bus: Path, order_id: str, lane: str, execute=False,
              bridge: Path = BRIDGE, receipt_dir: Path | None = None):
     if lane not in LANES:
         raise GateError("Unknown worker lane")
-    order, digest = approved_order(bus, order_id, claimed=True)
+    # The claim names the lane that may run it; dispatching on any other lane is refused.
+    order, digest = approved_order(bus, order_id, claimed=True, lane=lane)
     if not execute:
         print(f"VALID APPROVAL: {order_id}; lane={lane}; sha256={digest}")
         print("DRY RUN ONLY: pass --execute to invoke the existing worker bridge.")
@@ -94,7 +96,8 @@ def dispatch(bus: Path, order_id: str, lane: str, execute=False,
         raise GateError(f"Worker bridge not found: {bridge}")
     result_dir = (receipt_dir or (bus / "shipyard-receipts")).resolve()
     result_dir.mkdir(parents=True, exist_ok=True)
-    receipt_file = result_dir / (order_id + "-" + digest[:16] + "-" + lane + ".json")
+    # One approved order version runs at most ONCE, on any lane: the replay key is order + content hash, not lane.
+    receipt_file = result_dir / (order_id + "-" + digest[:16] + ".json")
     # Lock before starting work: concurrent callers must never launch the same
     # order twice. A STARTED receipt survives a crash and blocks silent replay.
     with (result_dir / ".dispatch.lock").open("a+", encoding="utf-8") as lock:
