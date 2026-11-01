@@ -1,0 +1,74 @@
+{
+  "schema": "genesis.shipyard.queue/1.0",
+  "updated_at": "2026-11-01",
+  "rules": {
+    "currency_budget_usd": 0,
+    "concurrent_heavy_workers": 1,
+    "never_auto": [
+      "merge",
+      "release",
+      "publish",
+      "payments",
+      "trades",
+      "external outreach",
+      "production service changes"
+    ],
+    "evidence_required": [
+      "commit_sha",
+      "CI/run logs",
+      "artifact checksum",
+      "independent QA result",
+      "owner install/use signoff"
+    ]
+  },
+  "products": [
+    {
+      "priority": 1,
+      "id": "AURUM-PULSE-2.2",
+      "name": "Aurum Pulse 2.2 — installable Android product",
+      "repo": "brandonduda8/genesis-player",
+      "current_evidence": "APK CI passed on branch; no physical phone certification or stable signing",
+      "evidence_url": "https://github.com/brandonduda8/genesis-player/pull/15",
+      "next_gate": "Safe APK installation/signing, offline+stream phone smoke, Zane release review",
+      "output": "Working APK, playback evidence, checksum, no user-data loss",
+      "lead": "Claude",
+      "qa": "Zane"
+    },
+    {
+      "priority": 2,
+      "id": "OMEGA-CSV-QA",
+      "name": "Genesis CSV QA Kit — first sellable software asset",
+      "repo": "brandonduda8/Agent-x",
+      "current_evidence": "Initial offline kit reported; code not reconciled into target repo",
+      "evidence_url": "https://github.com/brandonduda8/Agent-x/issues/24",
+      "next_gate": "Import verified source into branch, reproduce tests, create distributable ZIP and demo",
+      "output": "Runnable offline CSV QA product with test logs and checksum",
+      "lead": "Codex or OpenHands",
+      "qa": "Zane"
+    },
+    {
+      "priority": 3,
+      "id": "FOUNDRY-LEAD-TO-QUOTE",
+      "name": "Foundry Lead-to-Quote — useful business app",
+      "repo": "brandonduda8/genesis-hq",
+      "current_evidence": "Product charter and issue; full usable workflow not verified",
+      "evidence_url": "https://github.com/brandonduda8/genesis-hq/issues/3",
+      "next_gate": "Complete lead→quote→persist→export with automated tests and mobile proof",
+      "output": "Working app+demo+backup/restore",
+      "lead": "Claude or OpenHands",
+      "qa": "Zane"
+    },
+    {
+      "priority": 4,
+      "id": "UNIVERSE-CANARY",
+      "name": "Genesis Universe — first real working agent in city",
+      "repo": "brandonduda8/Genesis-core",
+      "current_evidence": "Local Creator Station prototype and unverified StarNet cross-host worker transport",
+      "evidence_url": "https://github.com/brandonduda8/Genesis-core/issues/1",
+      "next_gate": "Prove one isolated Anchor/MCP→real worker→receipt task; expose read-only task in city",
+      "output": "Clickable NPC with real bounded task and independently checked receipt",
+      "lead": "Astra+Codex",
+      "qa": "Zane"
+    }
+  ]
+}
