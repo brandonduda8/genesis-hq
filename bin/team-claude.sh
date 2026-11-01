@@ -6,7 +6,8 @@
 # a time (one-heavy-worker policy) — never run two of these concurrently.
 set -u
 WO="${1:?usage: team-claude.sh <work-order-file>}"
-GENESIS="$HOME/workspace/genesis-os"
+GENESIS="${GENESIS_WORKSPACE:-$HOME/workspace/genesis-os}"
+[ -d "$GENESIS" ] || { echo "Genesis workspace missing: $GENESIS (clone it or set GENESIS_WORKSPACE)" >&2; exit 2; }
 PROMPT="$(cat "$WO")"
 
 CLAUDE_BIN="${GENESIS_CLAUDE_BIN:-$(command -v claude 2>/dev/null || true)}"
