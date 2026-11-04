@@ -1,0 +1,152 @@
+{
+ "schema": "genesis.shipyard.board/1.0",
+ "generated_at": "2026-11-04T07:34:14Z",
+ "fresh_hours": 72.0,
+ "law": "LIVE only from fresh, green, fetched evidence. Cached or unfetched is never LIVE.",
+ "apps": [
+  {
+   "id": "aurum-pulse",
+   "name": "Aurum Pulse",
+   "what": "Android music player: your library, playlists, offline vault, background playback",
+   "owner": "Claude (build)",
+   "qa": "Zane",
+   "acceptance": "Brandon",
+   "stage_note": "2.2 signed + delivered by Zane (2026-11-02); 2.3 (playlists + sound) BUILT, waiting on Zane's signing",
+   "blockers": [
+    {
+     "text": "2.3 needs AURUM signing + real-phone certification",
+     "owner": "Zane",
+     "source": "https://github.com/brandonduda8/genesis-player/blob/claude/aurum-2.3/docs/AURUM-2.3-HANDOFF.md"
+    },
+    {
+     "text": "Brandon's install + verdict",
+     "owner": "Brandon",
+     "source": "https://github.com/brandonduda8/genesis-player/blob/claude/aurum-2.2/docs/AURUM-2.2-HANDOFF.md"
+    }
+   ],
+   "status": "LIVE",
+   "status_why": "green evidence 4 h old",
+   "evidence": [
+    {
+     "kind": "ci",
+     "label": "2.3 full battery",
+     "repo": "brandonduda8/genesis-player",
+     "fetched": true,
+     "ok": true,
+     "at": "2026-11-04T03:10:08Z",
+     "url": "https://github.com/brandonduda8/genesis-player/actions/runs/41763413035",
+     "sha": "07ce72c",
+     "detail": "latest run success on claude/aurum-2.3"
+    },
+    {
+     "kind": "ci",
+     "label": "2.2 full battery",
+     "repo": "brandonduda8/genesis-player",
+     "fetched": true,
+     "ok": true,
+     "at": "2026-11-02T01:38:45Z",
+     "url": "https://github.com/brandonduda8/genesis-player/actions/runs/41372091238",
+     "sha": "dd3dacf",
+     "detail": "latest run success on claude/aurum-2.2"
+    },
+    {
+     "kind": "branch",
+     "label": "2.3 branch head",
+     "repo": "brandonduda8/genesis-player",
+     "fetched": true,
+     "ok": true,
+     "at": "2026-11-04T03:12:10Z",
+     "url": "https://github.com/brandonduda8/genesis-player/commit/0d0bd95596b6e337b0bfb10098bbda94f633c315",
+     "sha": "0d0bd95",
+     "detail": "claude/aurum-2.3: docs: Aurum 2.3 handoff (run 41763413035: 32/32 battery, 9/9 instrumented; unsigned APK sh"
+    }
+   ]
+  },
+  {
+   "id": "starnet",
+   "name": "StarNet App",
+   "what": "Make / Meet / Manage, the fleet's receipt feed and Nighthawk chat (working title; name is Brandon's call, B-6)",
+   "owner": "Claude (build)",
+   "qa": "Zane",
+   "acceptance": "Brandon",
+   "stage_note": "Fold One (Origami v0) built and headless-proven; the Android NOW slice is queued after Shipyard",
+   "blockers": [
+    {
+     "text": "App name (B-6)",
+     "owner": "Brandon",
+     "source": "https://github.com/brandonduda8/Genesis-core/tree/claude/origami-fold-one/origami"
+    },
+    {
+     "text": "A read-only receipt-feed export or endpoint for the app (Z-16)",
+     "owner": "Zane",
+     "source": "https://github.com/brandonduda8/Genesis-os/tree/claude/mirror-mesh/mirror"
+    }
+   ],
+   "status": "STALE",
+   "status_why": "newest green evidence is 79 h old (fresh window 72 h)",
+   "evidence": [
+    {
+     "kind": "pr",
+     "label": "Origami v0 + Fold One",
+     "repo": "brandonduda8/Genesis-core",
+     "fetched": true,
+     "ok": true,
+     "at": "2026-11-01T00:37:42Z",
+     "url": "https://github.com/brandonduda8/Genesis-core/pull/28",
+     "sha": "2ebd7b6",
+     "detail": "PR #28 open: Origami v0 + Fold One: the StarNet App (WO-ORIGAMI-001, WO-STARNET-MAX-001 \u00a75)"
+    }
+   ]
+  },
+  {
+   "id": "ghost-data-studio",
+   "name": "GHOST Data Studio",
+   "what": "GHOST v2 job core, lineage and ledger (the data side of the fleet)",
+   "owner": "Claude (build)",
+   "qa": "Zane",
+   "acceptance": "Brandon",
+   "stage_note": "GHOST v2 merged to Genesis-os main; deploy on zane-box is owed (Z-1). No Data Studio UI yet",
+   "blockers": [
+    {
+     "text": "Deploy GHOST v2 and drain one queue item through a real heal window (Z-1)",
+     "owner": "Zane",
+     "source": "https://github.com/brandonduda8/Genesis-os/pull/1"
+    }
+   ],
+   "status": "STALE",
+   "status_why": "newest green evidence is 80 h old (fresh window 72 h)",
+   "evidence": [
+    {
+     "kind": "branch",
+     "label": "Genesis-os main",
+     "repo": "brandonduda8/Genesis-os",
+     "fetched": true,
+     "ok": true,
+     "at": "2026-10-31T23:05:29Z",
+     "url": "https://github.com/brandonduda8/Genesis-os/commit/586193e2d27c965b89ab765acb311278fc93caa2",
+     "sha": "586193e",
+     "detail": "main: Merge pull request #5 from brandonduda8/claude/troubleshooter-001"
+    }
+   ]
+  },
+  {
+   "id": "agent-studio",
+   "name": "Genesis Agent Studio",
+   "what": "Phone-first agent studio (named in WO-005; prioritised after the Aurum release)",
+   "owner": "unassigned",
+   "qa": "Zane",
+   "acceptance": "Brandon",
+   "stage_note": "Not started: no source, no branch, no CI. Shown so it is not forgotten, not as progress",
+   "blockers": [
+    {
+     "text": "Needs a scoped spec (Astra) and a place in the build sequence (Brandon, B-10)",
+     "owner": "Astra / Brandon",
+     "source": "https://github.com/brandonduda8/Genesis-os/tree/claude/mirror-mesh/mirror"
+    }
+   ],
+   "status": "UNKNOWN",
+   "status_why": "no evidence exists yet",
+   "evidence": []
+  }
+ ]
+}

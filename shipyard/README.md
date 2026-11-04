@@ -96,3 +96,24 @@ a reproducible artifact; `OWNER_ACCEPT` = founder used and approved product;
 
 The code in this feature branch is **candidate tooling** until CI and a
 read-only test on a real Genesis HQ host pass. It is not installed on StarNet.
+
+## The Shipyard board (read-only, phone-first)
+
+`shipyard/board/` is the first usable surface of the Shipyard app (WO-GENESIS-SHIPYARD-APP-ALIGNMENT-005, first
+engineering checkpoint): one truthful, phone-viewable board of the apps under development.
+
+- `sources.json`: the apps, their owners and blockers (each with a source link), and the evidence **probes**
+  (latest CI run on a branch, branch head, PR state). It holds no status claims.
+- `build_board.py`: asks GitHub (GET only) and writes `site/board.json`. **LIVE** means fresh, green, fetched evidence;
+  **STALE** means old or a non-green latest run; **UNKNOWN** means nothing could be fetched. Unreachable is never LIVE.
+- `site/`: a static page (no external scripts, offline-capable, light/dark). If `board.json` is older than its fresh
+  window, the page itself downgrades LIVE to STALE and says why.
+
+```bash
+python3 -m unittest shipyard/board/test_board.py              # the status law, no network
+python3 shipyard/board/build_board.py --via-gh                # or GITHUB_TOKEN=… for private repos
+cd shipyard/board/site && python3 -m http.server 8080 --bind 127.0.0.1   # serve privately (loopback / mesh only)
+```
+
+Not on the board yet, and labelled as missing rather than faked: approvals, mission intake (needs Anchor/Router
+mission IDs), and worker health/stop.
