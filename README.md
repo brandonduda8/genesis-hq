@@ -1,7 +1,14 @@
 # Genesis HQ
 
-The cloud headquarters for the Genesis engineering team. One tap launches a
-fully-provisioned 4-core dev box: the worker bridge (Claude / Codex / Gemini
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+A GitHub Codespaces dev-box definition plus a small set of Bash and Python
+scripts that dispatch "work orders" to several AI coding-agent CLIs from one
+place. It is the author's personal cloud workstation for the Genesis
+multi-agent project ("the Genesis engineering team" below means those agent
+lanes).
+
+One tap launches a fully-provisioned 4-core dev box: the worker bridge (Claude / Codex / Gemini
 lanes), all three agent CLIs, Docker, and optional Tailscale join so Zane can
 SSH straight in.
 
@@ -48,5 +55,16 @@ protocol, one dispatcher, one set of laws, on every box. See [DRAGON_OS.md](DRAG
 - `bin/team-claude.sh` — Claude Code runner (Pro OAuth)
 - `bin/team-codex.sh` — ChatGPT/Codex runner (read-only sandbox default)
 - `bin/team-gemini.sh` — Gemini CLI runner
+- `bin/team-qwen.py` — Qwen runner via a local Groq proxy (stdlib Python)
+- `dragon/dragon` — the Dragon OS CLI (`status | tools | workers | boot | laws`), with `dragon/boot.sh`, `LAWS.md`, `TOOLBELT.md`
+- `inbox/`, `outbox/` — where work orders land and finished results are written
 - `provision/setup.sh` — the provisioner (idempotent, re-runnable)
 - `.devcontainer/devcontainer.json` — the box definition
+
+## Tests
+
+No automated tests or CI yet. All shell scripts pass `bash -n` syntax checks.
+
+## License
+
+[MIT](LICENSE)
