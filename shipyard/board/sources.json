@@ -7,53 +7,112 @@
       "id": "aurum-pulse",
       "name": "Aurum Pulse",
       "what": "Android music player: your library, playlists, offline vault, background playback",
-      "owner": "Claude (build)", "qa": "Zane", "acceptance": "Brandon",
-      "stage_note": "2.2 signed + delivered by Zane (2026-11-02); 2.3 (playlists + sound) BUILT, waiting on Zane's signing",
+      "owner": "Claude (build)",
+      "qa": "Zane",
+      "acceptance": "Brandon",
+      "stage_note": "2.4.4 golden (WO-AURUM-GOLDEN-MAX, all 4 charges) BUILT + TESTED on the emulator; 2.3 founder-rejected; a signed 2.4.3 is in Vault 04 (signer unverified); DONE = Brandon's Moto G swipe-away + screen-off",
       "blockers": [
-        {"text": "2.3 needs AURUM signing + real-phone certification", "owner": "Zane", "source": "https://github.com/brandonduda8/genesis-player/blob/claude/aurum-2.3/docs/AURUM-2.3-HANDOFF.md"},
-        {"text": "Brandon's install + verdict", "owner": "Brandon", "source": "https://github.com/brandonduda8/genesis-player/blob/claude/aurum-2.2/docs/AURUM-2.2-HANDOFF.md"}
+        {
+          "text": "2.4.4 needs AURUM signing (and a signer receipt for the 2.4.3 in Vault 04)",
+          "owner": "Zane",
+          "source": "https://github.com/brandonduda8/genesis-player/blob/claude/aurum-2.4-golden/docs/AURUM-2.4-HANDOFF.md"
+        },
+        {
+          "text": "Moto G checklist: music survives swipe-away + screen-off",
+          "owner": "Brandon",
+          "source": "https://github.com/brandonduda8/genesis-player/blob/claude/aurum-2.4-golden/docs/AURUM-2.4-HANDOFF.md"
+        }
       ],
       "probes": [
-        {"kind": "ci", "label": "2.3 full battery", "repo": "brandonduda8/genesis-player", "branch": "claude/aurum-2.3", "workflow": "aurum-22.yml"},
-        {"kind": "ci", "label": "2.2 full battery", "repo": "brandonduda8/genesis-player", "branch": "claude/aurum-2.2", "workflow": "aurum-22.yml"},
-        {"kind": "branch", "label": "2.3 branch head", "repo": "brandonduda8/genesis-player", "branch": "claude/aurum-2.3"}
+        {
+          "kind": "ci",
+          "label": "2.4 golden full battery",
+          "repo": "brandonduda8/genesis-player",
+          "branch": "claude/aurum-2.4-golden",
+          "workflow": "aurum-22.yml"
+        },
+        {
+          "kind": "ci",
+          "label": "2.4 golden APK smoke",
+          "repo": "brandonduda8/genesis-player",
+          "branch": "claude/aurum-2.4-golden",
+          "workflow": "aurum-apk.yml"
+        },
+        {
+          "kind": "branch",
+          "label": "2.4 golden branch head",
+          "repo": "brandonduda8/genesis-player",
+          "branch": "claude/aurum-2.4-golden"
+        }
       ]
     },
     {
       "id": "starnet",
       "name": "StarNet App",
       "what": "Make / Meet / Manage, the fleet's receipt feed and Nighthawk chat (working title; name is Brandon's call, B-6)",
-      "owner": "Claude (build)", "qa": "Zane", "acceptance": "Brandon",
+      "owner": "Claude (build)",
+      "qa": "Zane",
+      "acceptance": "Brandon",
       "stage_note": "Fold One (Origami v0) built and headless-proven; the Android NOW slice is queued after Shipyard",
       "blockers": [
-        {"text": "App name (B-6)", "owner": "Brandon", "source": "https://github.com/brandonduda8/Genesis-core/tree/claude/origami-fold-one/origami"},
-        {"text": "A read-only receipt-feed export or endpoint for the app (Z-16)", "owner": "Zane", "source": "https://github.com/brandonduda8/Genesis-os/tree/claude/mirror-mesh/mirror"}
+        {
+          "text": "App name (B-6)",
+          "owner": "Brandon",
+          "source": "https://github.com/brandonduda8/Genesis-core/tree/claude/origami-fold-one/origami"
+        },
+        {
+          "text": "A read-only receipt-feed export or endpoint for the app (Z-16)",
+          "owner": "Zane",
+          "source": "https://github.com/brandonduda8/Genesis-os/tree/claude/mirror-mesh/mirror"
+        }
       ],
       "probes": [
-        {"kind": "pr", "label": "Origami v0 + Fold One", "repo": "brandonduda8/Genesis-core", "number": 28}
+        {
+          "kind": "pr",
+          "label": "Origami v0 + Fold One",
+          "repo": "brandonduda8/Genesis-core",
+          "number": 28
+        }
       ]
     },
     {
       "id": "ghost-data-studio",
       "name": "GHOST Data Studio",
       "what": "GHOST v2 job core, lineage and ledger (the data side of the fleet)",
-      "owner": "Claude (build)", "qa": "Zane", "acceptance": "Brandon",
+      "owner": "Claude (build)",
+      "qa": "Zane",
+      "acceptance": "Brandon",
       "stage_note": "GHOST v2 merged to Genesis-os main; deploy on zane-box is owed (Z-1). No Data Studio UI yet",
       "blockers": [
-        {"text": "Deploy GHOST v2 and drain one queue item through a real heal window (Z-1)", "owner": "Zane", "source": "https://github.com/brandonduda8/Genesis-os/pull/1"}
+        {
+          "text": "Deploy GHOST v2 and drain one queue item through a real heal window (Z-1)",
+          "owner": "Zane",
+          "source": "https://github.com/brandonduda8/Genesis-os/pull/1"
+        }
       ],
       "probes": [
-        {"kind": "branch", "label": "Genesis-os main", "repo": "brandonduda8/Genesis-os", "branch": "main"}
+        {
+          "kind": "branch",
+          "label": "Genesis-os main",
+          "repo": "brandonduda8/Genesis-os",
+          "branch": "main"
+        }
       ]
     },
     {
       "id": "agent-studio",
       "name": "Genesis Agent Studio",
       "what": "Phone-first agent studio (named in WO-005; prioritised after the Aurum release)",
-      "owner": "unassigned", "qa": "Zane", "acceptance": "Brandon",
+      "owner": "unassigned",
+      "qa": "Zane",
+      "acceptance": "Brandon",
       "stage_note": "Not started: no source, no branch, no CI. Shown so it is not forgotten, not as progress",
       "blockers": [
-        {"text": "Needs a scoped spec (Astra) and a place in the build sequence (Brandon, B-10)", "owner": "Astra / Brandon", "source": "https://github.com/brandonduda8/Genesis-os/tree/claude/mirror-mesh/mirror"}
+        {
+          "text": "Needs a scoped spec (Astra) and a place in the build sequence (Brandon, B-10)",
+          "owner": "Astra / Brandon",
+          "source": "https://github.com/brandonduda8/Genesis-os/tree/claude/mirror-mesh/mirror"
+        }
       ],
       "probes": []
     }

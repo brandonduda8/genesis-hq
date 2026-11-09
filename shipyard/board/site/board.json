@@ -1,6 +1,6 @@
 {
  "schema": "genesis.shipyard.board/1.0",
- "generated_at": "2026-11-04T07:34:14Z",
+ "generated_at": "2026-11-09T19:31:44Z",
  "fresh_hours": 72.0,
  "law": "LIVE only from fresh, green, fetched evidence. Cached or unfetched is never LIVE.",
  "apps": [
@@ -11,54 +11,54 @@
    "owner": "Claude (build)",
    "qa": "Zane",
    "acceptance": "Brandon",
-   "stage_note": "2.2 signed + delivered by Zane (2026-11-02); 2.3 (playlists + sound) BUILT, waiting on Zane's signing",
+   "stage_note": "2.4.4 golden (WO-AURUM-GOLDEN-MAX, all 4 charges) BUILT + TESTED on the emulator; 2.3 founder-rejected; a signed 2.4.3 is in Vault 04 (signer unverified); DONE = Brandon's Moto G swipe-away + screen-off",
    "blockers": [
     {
-     "text": "2.3 needs AURUM signing + real-phone certification",
+     "text": "2.4.4 needs AURUM signing (and a signer receipt for the 2.4.3 in Vault 04)",
      "owner": "Zane",
-     "source": "https://github.com/brandonduda8/genesis-player/blob/claude/aurum-2.3/docs/AURUM-2.3-HANDOFF.md"
+     "source": "https://github.com/brandonduda8/genesis-player/blob/claude/aurum-2.4-golden/docs/AURUM-2.4-HANDOFF.md"
     },
     {
-     "text": "Brandon's install + verdict",
+     "text": "Moto G checklist: music survives swipe-away + screen-off",
      "owner": "Brandon",
-     "source": "https://github.com/brandonduda8/genesis-player/blob/claude/aurum-2.2/docs/AURUM-2.2-HANDOFF.md"
+     "source": "https://github.com/brandonduda8/genesis-player/blob/claude/aurum-2.4-golden/docs/AURUM-2.4-HANDOFF.md"
     }
    ],
    "status": "LIVE",
-   "status_why": "green evidence 4 h old",
+   "status_why": "green evidence 12 h old",
    "evidence": [
     {
      "kind": "ci",
-     "label": "2.3 full battery",
+     "label": "2.4 golden full battery",
      "repo": "brandonduda8/genesis-player",
      "fetched": true,
      "ok": true,
-     "at": "2026-11-04T03:10:08Z",
-     "url": "https://github.com/brandonduda8/genesis-player/actions/runs/41763413035",
-     "sha": "07ce72c",
-     "detail": "latest run success on claude/aurum-2.3"
+     "at": "2026-11-09T07:32:52Z",
+     "url": "https://github.com/brandonduda8/genesis-player/actions/runs/42577956403",
+     "sha": "024853e",
+     "detail": "latest run success on claude/aurum-2.4-golden"
     },
     {
      "kind": "ci",
-     "label": "2.2 full battery",
+     "label": "2.4 golden APK smoke",
      "repo": "brandonduda8/genesis-player",
      "fetched": true,
      "ok": true,
-     "at": "2026-11-02T01:38:45Z",
-     "url": "https://github.com/brandonduda8/genesis-player/actions/runs/41372091238",
-     "sha": "dd3dacf",
-     "detail": "latest run success on claude/aurum-2.2"
+     "at": "2026-11-09T07:19:40Z",
+     "url": "https://github.com/brandonduda8/genesis-player/actions/runs/42577956395",
+     "sha": "024853e",
+     "detail": "latest run success on claude/aurum-2.4-golden"
     },
     {
      "kind": "branch",
-     "label": "2.3 branch head",
+     "label": "2.4 golden branch head",
      "repo": "brandonduda8/genesis-player",
      "fetched": true,
      "ok": true,
-     "at": "2026-11-04T03:12:10Z",
-     "url": "https://github.com/brandonduda8/genesis-player/commit/0d0bd95596b6e337b0bfb10098bbda94f633c315",
-     "sha": "0d0bd95",
-     "detail": "claude/aurum-2.3: docs: Aurum 2.3 handoff (run 41763413035: 32/32 battery, 9/9 instrumented; unsigned APK sh"
+     "at": "2026-11-09T07:34:25Z",
+     "url": "https://github.com/brandonduda8/genesis-player/commit/0d3188c955f2dedfb38fb026e8d98c6a4b1fe7e3",
+     "sha": "0d3188c",
+     "detail": "claude/aurum-2.4-golden: docs: 2.4.4 charge 4 in the handoff; checklist step for the icon [skip ci]"
     }
    ]
   },
@@ -83,7 +83,7 @@
     }
    ],
    "status": "STALE",
-   "status_why": "newest green evidence is 79 h old (fresh window 72 h)",
+   "status_why": "newest green evidence is 211 h old (fresh window 72 h)",
    "evidence": [
     {
      "kind": "pr",
@@ -113,8 +113,8 @@
      "source": "https://github.com/brandonduda8/Genesis-os/pull/1"
     }
    ],
-   "status": "STALE",
-   "status_why": "newest green evidence is 80 h old (fresh window 72 h)",
+   "status": "LIVE",
+   "status_why": "green evidence 46 h old",
    "evidence": [
     {
      "kind": "branch",
@@ -122,10 +122,10 @@
      "repo": "brandonduda8/Genesis-os",
      "fetched": true,
      "ok": true,
-     "at": "2026-10-31T23:05:29Z",
-     "url": "https://github.com/brandonduda8/Genesis-os/commit/586193e2d27c965b89ab765acb311278fc93caa2",
-     "sha": "586193e",
-     "detail": "main: Merge pull request #5 from brandonduda8/claude/troubleshooter-001"
+     "at": "2026-11-07T21:20:42Z",
+     "url": "https://github.com/brandonduda8/Genesis-os/commit/ff3ee3f58845f56393ef7a3a0dd4014e7691a0e0",
+     "sha": "ff3ee3f",
+     "detail": "main: docs: portfolio README polish and MIT LICENSE (#11)"
     }
    ]
   },
