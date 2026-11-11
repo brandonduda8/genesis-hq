@@ -1,6 +1,6 @@
 {
  "schema": "genesis.shipyard.board/1.0",
- "generated_at": "2026-11-09T19:31:44Z",
+ "generated_at": "2026-11-11T07:31:09Z",
  "fresh_hours": 72.0,
  "law": "LIVE only from fresh, green, fetched evidence. Cached or unfetched is never LIVE.",
  "apps": [
@@ -25,7 +25,7 @@
     }
    ],
    "status": "LIVE",
-   "status_why": "green evidence 12 h old",
+   "status_why": "green evidence 48 h old",
    "evidence": [
     {
      "kind": "ci",
@@ -83,7 +83,7 @@
     }
    ],
    "status": "STALE",
-   "status_why": "newest green evidence is 211 h old (fresh window 72 h)",
+   "status_why": "newest green evidence is 247 h old (fresh window 72 h)",
    "evidence": [
     {
      "kind": "pr",
@@ -113,8 +113,8 @@
      "source": "https://github.com/brandonduda8/Genesis-os/pull/1"
     }
    ],
-   "status": "LIVE",
-   "status_why": "green evidence 46 h old",
+   "status": "STALE",
+   "status_why": "newest green evidence is 82 h old (fresh window 72 h)",
    "evidence": [
     {
      "kind": "branch",
